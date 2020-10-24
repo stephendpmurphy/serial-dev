@@ -1,0 +1,32 @@
+{
+  "name": "serial-monitor",
+  "version": "1.0.0",
+  "description": "Cross Platform Serial Monitor written using Electron and NodeJS",
+  "main": "src/js/main.js",
+  "scripts": {
+    "start": "electron .",
+    "install": "electron-rebuild",
+    "compile:sass": "node-sass src/sass/main.scss src/css/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephendpmurphy/serial-monitor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stephendpmurphy/serial-monitor/issues"
+  },
+  "homepage": "https://github.com/stephendpmurphy/serial-monitor#readme",
+  "devDependencies": {
+    "electron": "^10.1.4",
+    "electron-rebuild": "^2.3.1",
+    "node-sass": "^4.14.1"
+  },
+  "dependencies": {
+    "ansi-regex": "^5.0.0",
+    "nord": "^0.2.1",
+    "serialport": "^9.0.2"
+  }
+}

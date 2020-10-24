@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Electron Serial Monitor</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="serialMonitor">
+        <div class="info-msg" id="info-msg">
+            <div class="info-msg--wrap">
+                <p class="info-msg--type" id="infoType"></p>
+                <p class="info-msg--txt" id="infoTxt"></p>
+            </div>
+        </div>
+
+        <div class="dataDiv">
+            <pre class="serialData" id="dataOutput"></pre>
+            <div class="dataControls">
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    require('./js/index.js')
+  </script>
+</html>

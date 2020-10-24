@@ -1,0 +1,134 @@
+* {
+  margin: 0;
+  padding: 0; }
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit; }
+
+html {
+  background-color: #2E3440;
+  color: #ECEFF4;
+  font-size: 62.5%; }
+
+body {
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+  font-weight: 400; }
+
+.btn, .btn:link, .btn:visited {
+  font-size: 1.6rem;
+  border: 1px solid #2E3440;
+  display: inline-block;
+  cursor: pointer;
+  color: #ECEFF4;
+  text-decoration: none;
+  text-shadow: 0px -1px 0px #434C5E;
+  box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.3);
+  margin-left: 1rem;
+  padding: .9rem 1.8rem;
+  transition: all .1s; }
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1.5rem 2.2rem rgba(0, 0, 0, 0.6); }
+
+.btn:active {
+  transform: translateY(-1px); }
+
+.btn--red {
+  background-color: #BF616A; }
+
+.btn--green {
+  background-color: #A3BE8C; }
+
+.btn--blue {
+  background-color: #5E81AC; }
+
+/* Data output scroll bar */
+::-webkit-scrollbar {
+  width: 0.7rem;
+  height: 0.7rem; }
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #ECEFF4;
+  border-radius: 10px; }
+
+::-webkit-scrollbar-thumb {
+  background: #EBCB8B;
+  border-radius: 10px; }
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D08770; }
+
+.info-msg {
+  right: 5rem;
+  top: 5rem;
+  position: absolute;
+  width: 30rem;
+  height: 10rem;
+  background-color: #2E3440;
+  border: 1px solid #434C5E;
+  border-radius: 5px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
+  transition: opacity .2s;
+  opacity: 0; }
+
+.info-msg--wrap {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  width: 29rem;
+  height: 9rem;
+  text-align: center; }
+
+.info-msg--type {
+  margin-top: 1.5rem;
+  font-size: 1.6rem; }
+
+.info-msg--txt {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  padding: 0 1rem; }
+
+.floatRight {
+  float: right; }
+
+.serialMonitor {
+  height: 100vh;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column; }
+
+/* Serial port controls div */
+.controlsDiv {
+  background-color: #434C5E;
+  padding: 1.5rem;
+  border-radius: 5px;
+  box-shadow: 0 1rem 3rem black; }
+
+/* Data output and window controls */
+.dataDiv {
+  background-color: #434C5E;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2rem 3rem black; }
+
+.serialData {
+  background-color: #2E3440;
+  color: #ECEFF4;
+  padding: 1rem;
+  flex: 1 1 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  font-size: 1.2rem;
+  box-shadow: inset 0 1rem 3rem black; }
+
+.dataControls {
+  margin-top: .5rem;
+  padding: 1rem;
+  display: block; }

@@ -1,0 +1,113 @@
+@import "node_modules/nord/src/nord.css";
+
+*,
+html {
+    box-sizing: border-box;
+    font-size: 15px;
+    font-family:Arial;
+}
+
+body {
+    background-color: #2E3440;
+    height: 100%;
+    overflow: hidden;
+}
+
+.myButton {
+    border:1px solid #2E3440;
+    display:inline-block;
+    cursor:pointer;
+    color:#ECEFF4;
+    font-weight:bold;
+    padding:9px 23px;
+    text-decoration:none;
+    text-shadow:0px -1px 0px #434C5E;
+    box-shadow: 0 1rem 2rem black;
+
+    margin-left: 1rem;
+
+    transition: all .25s;
+}
+
+.myButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1.5rem 2.2rem black;
+}
+
+.myButton:active {
+	transform: translateY(2px);
+}
+
+.clsRed {
+    background-color: #BF616A;
+}
+
+.clsBlue {
+    background-color: #5E81AC;
+}
+
+.floatRight {
+    float: right;
+}
+
+.serialMonitor {
+    height: 100vh;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Serial port controls div */
+.controlsDiv {
+    background-color: #434C5E;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 1rem 3rem black;
+}
+
+/* Data output and window controls */
+.dataDiv {
+    background-color: #434C5E;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    box-shadow: 0 2rem 3rem black;
+}
+
+.serialData {
+    background-color: #2E3440;
+    color: #ECEFF4;
+    padding: 1rem;
+    flex: 1 1 0;
+    overflow-y: auto;
+    border-radius: 5px;
+    font-size: .8rem;
+    box-shadow: inset 0 1rem 3rem black;
+}
+
+.dataControls {
+    display: block;
+}
+
+/* Data output scroll bar */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #D8DEE9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background:#BF616A;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #854249;
+}
