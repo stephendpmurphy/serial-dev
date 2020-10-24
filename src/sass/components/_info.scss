@@ -1,34 +1,29 @@
 .info-msg {
     & {
-        right: 5rem;
-        top: 5rem;
+        right: -50rem;
+        bottom: 5rem;
         position: absolute;
-        width: 30rem;
-        height: 10rem;
+        width: 25rem;
+        height: 9rem;
         background-color: $color-primary-dark;
         border: 1px solid $color-primary-light;
-        border-radius: 5px;
         box-shadow: 0 1rem 2rem rgba(#000, .5);
-        transition: opacity .2s;
-        opacity: 0;
+        transition: all .2s;
+        opacity: 1;
+        border-radius: 2px;
     }
 
-    &--wrap {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        width: 29rem;
-        height: 9rem;
-        text-align: center;
-    }
-
-    &--type {
-        margin-top: 1.5rem;
+    &--head {
+        padding-left: 1.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 0.5rem;
         font-size: 1.6rem;
+        border-bottom: 1px solid $color-white;
     }
 
     &--txt {
-        margin-top: 1rem;
+        padding-top: 1rem;
+        padding-left: 1.5rem;
         font-size: 1.2rem;
-        padding: 0 1rem;
     }
 }

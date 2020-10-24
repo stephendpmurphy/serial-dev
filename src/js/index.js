@@ -147,7 +147,7 @@ var UIController = (function() {
     var DOMstrings = {
         serialData: "dataOutput",
         info_msg: "info-msg",
-        infoType: "infoType",
+        infoHead: "infoHead",
         infoTxt: "infoTxt"
     }
 
@@ -206,28 +206,58 @@ var UIController = (function() {
         clearSerialData: function() {
             document.getElementById(DOMstrings.serialData).textContent = "";
         },
-        showInfoMsg: function(type, msg) {
+        showInfoMsg: function(type, header, msg) {
             document.getElementById(DOMstrings.info_msg).style.opacity = 1;
-            document.getElementById(DOMstrings.infoType).textContent = type;
+            document.getElementById(DOMstrings.info_msg).style.WebkitTransform = "translate(-53rem, 0)";
+
+            if( type === "error" ) {
+                document.getElementById(DOMstrings.info_msg).style.backgroundColor = "#BF616A";
+            }
+            else if( type === "info" ) {
+                document.getElementById(DOMstrings.info_msg).style.backgroundColor = "#BF616A";
+            }
+
+            document.getElementById(DOMstrings.infoHead).textContent = header;
             document.getElementById(DOMstrings.infoTxt).textContent = msg;
+
             setTimeout(() => {
                 document.getElementById(DOMstrings.info_msg).style.opacity = 0;
+                document.getElementById(DOMstrings.info_msg).style.transform = ""
             }, 4000);
         }
-
     }
 })();
 
 var controller = (function(dataCtrl, UICtrl) {
 
     var availablePorts = [];
+    var menuTopBar;
 
     var CB_dataRcvd = function(incoming) {
         UICtrl.appendSerialData(incoming);
     }
 
+    var retrievePortList = function() {
+        // Retrieve the currently available ports.
+        dataCtrl.getAvailableSerialPorts().then( (ports) => {
+            console.log("Available ports: ", ports);
+
+            // Store the available ports list
+            availablePorts = ports;
+        })
+    }
+
+    var enableMenuItem = function(btn, en) {
+        if( btn === 'connect' ) {
+            menuTopBar[1][1].enabled = en;
+        }
+        else if( btn === 'disconnect' ) {
+            menuTopBar[1][2].enabled = en;
+        }
+    }
+
     var createMenuBar = function() {
-        var menu = remote.Menu.buildFromTemplate([
+        menuTopBar = remote.Menu.buildFromTemplate([
             {
                 label: 'File',
                 submenu: [
@@ -250,33 +280,34 @@ var controller = (function(dataCtrl, UICtrl) {
                     },
                     {
                         label:'Connect',
+                        enabled: false,
                         click () {
                             var settings = dataCtrl.getPortSettings();
 
                             if( dataCtrl.portConnect() ) {
-                                UICtrl.showInfoMsg("CONNECTED", `Connected to ${settings.path} at ${settings.baud} baud.`);
+                                UICtrl.showInfoMsg("info", "CONNECTED", `Connected to ${settings.path} at ${settings.baud} baud.`);
                             }
                             else {
-                                UICtrl.showInfoMsg("ERROR", `Could not connect to ${settings.path}`);
+                                UICtrl.showInfoMsg("error", "ERROR", `Could not connect to ${settings.path}`);
                             }
                         }
                     },
                     {
                         label:'Disconnect',
+                        enabled: false,
                         click() { dataCtrl.portDisconnect() }
                     },
                     {
                         label:'Refresh',
                         click () {
-                            availablePorts = dataCtrl.getAvailableSerialPorts()
-                            console.log("Available ports: ", availablePorts);
+                            retrievePortList();
                         }
                     }
                 ]
             }
         ])
 
-        remote.Menu.setApplicationMenu(menu);
+        remote.Menu.setApplicationMenu(menuTopBar);
     };
 
     return {
@@ -284,14 +315,11 @@ var controller = (function(dataCtrl, UICtrl) {
             // Create the top menu-bar
             createMenuBar();
 
-            // Retrieve the currently available ports.
-            // Wait until it finishes.
-            dataCtrl.getAvailableSerialPorts();
+            // Retrieve a list of available ports
+            retrievePortList();
 
             // Setup the callback for new data
             dataCtrl.setupDataCB( CB_dataRcvd );
-
-            dataCtrl.updatePortSettings('/dev/ttyUSB0', 9600);
         }
     }
 })(dataController, UIController);

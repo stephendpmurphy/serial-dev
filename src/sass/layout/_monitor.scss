@@ -1,33 +1,17 @@
-.floatRight {
-    float: right;
-}
-
 .serialMonitor {
     height: 100vh;
     width: 100%;
-    padding: 1rem;
     display: flex;
     flex-direction: column;
-}
-
-/* Serial port controls div */
-.controlsDiv {
-    background-color: $color-primary-light;
-    padding: 1.5rem;
-    border-radius: 5px;
-    box-shadow: 0 1rem 3rem black;
 }
 
 /* Data output and window controls */
 .dataDiv {
     background-color: $color-primary-light;
-    margin-bottom: 2rem;
     padding: 1rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    // border-radius: 5px;
-    box-shadow: 0 2rem 3rem black;
 }
 
 .serialData {
@@ -37,13 +21,6 @@
     flex: 1 1 0;
     overflow-y: auto;
     overflow-x: auto;
-    // border-radius: 5px;
     font-size: 1.2rem;
     box-shadow: inset 0 1rem 3rem black;
-}
-
-.dataControls {
-    margin-top: .5rem;
-    padding: 1rem;
-    display: block;
 }
