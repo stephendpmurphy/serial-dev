@@ -13,7 +13,8 @@ function createWindow () {
   })
 
   win.loadFile('src/index.html')
-  win.webContents.openDevTools()
+  win.removeMenu();
+//   win.webContents.openDevTools()
 }
 
 app.allowRendererProcessReuse=false

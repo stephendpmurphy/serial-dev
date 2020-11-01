@@ -8,21 +8,27 @@ const path = require('path');
 var dataController = (function() {
 
     // Parser for turning a byte buffer into an ascii string
-    var parser;
-    var port;
-    var portSettings = {
-        path: null,
-        baud: 9600
-    };
+    var serialPort = {
+        parser: null,
+        port: null,
+        settings: {
+            path: null,
+            baud: null
+        },
+        isConfigured: false
+    }
+
     var CB_dataRcvd;
 
     var openPort = function(path, baud) {
-        port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
+        serialPort.port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
+            console.log(`${err}`);
             if(err) {
-                console.log("Error: ", err.message);
+                console.log("Error: ", err);
                 return false;
             }
             else {
+                console.log("No errors");
                 return true;
             }
         })
@@ -70,7 +76,7 @@ var dataController = (function() {
             return portList;
         },
         getPortSettings: function() {
-            return portSettings;
+            return serialPort.portSettings;
         },
         updatePortSettings: function(path, baud) {
             if( (typeof(path) !== 'string') && path === "" )
@@ -79,34 +85,46 @@ var dataController = (function() {
             if( (typeof(baud) !== 'number') || baud === 0 )
                 return false;
 
-            portSettings.path = path;
-            portSettings.baud = baud;
+            serialPort.settings.path = path;
+            serialPort.settings.baud = baud;
 
             this.portDisconnect();
 
-            openPort(portSettings.path, portSettings.baud);
+            console.log(`Connecting to ${serialPort.settings.path} @ ${serialPort.settings.baud} baud`);
 
-            parser = port.pipe(new Readline({delimeter: '\n'}))
+            openPort(serialPort.settings.path, serialPort.settings.baud);
 
-            parser.on('data', (data) => {
+            serialPort.parser = serialPort.port.pipe(new Readline({delimeter: '\n'}))
+
+            serialPort.parser.on('data', (data) => {
                 var newData = removeAnsiCodes(data);
                 CB_dataRcvd(newData);
             })
 
-            port.on('open', () => {
+            serialPort.port.on('open', () => {
                 console.log("Port opened.");
             })
 
-            port.on('close', () => {
+            serialPort.port.on('close', () => {
                 console.log("Port closed.");
             })
+
+            serialPort.port.open();
+
+            return true;
         },
         portConnect: function() {
             try {
+                if( (portSettings.path === undefined) || portSettings.baud !== undefined ) {
+                    console.log("Problem found with settings");
+                    return false;
+                }
+
                 openPort(portSettings.path, portSettings.baud);
 
-                if( port !== undefined ) {
-                    return port.open();
+                if( serialPort.port !== undefined ) {
+                    console.log("Opening");
+                    return serialPort.port.open();
                 }
                 else
                 {
@@ -119,9 +137,10 @@ var dataController = (function() {
 
         },
         portDisconnect: function() {
+            console.log("Closing port");
             try {
-                if( port !== undefined ) {
-                    return port.close();
+                if( serialPort.port !== undefined ) {
+                    return serialPort.port.close();
                 }
                 else
                 {
@@ -129,6 +148,14 @@ var dataController = (function() {
                 }
             }
             catch(err) {
+                return false;
+            }
+        },
+        isPortOpen: function() {
+            if(port !== undefined) {
+                return serialPort.port.isOpen;
+            }
+            else {
                 return false;
             }
         },
@@ -148,7 +175,14 @@ var UIController = (function() {
         serialData: "dataOutput",
         info_msg: "info-msg",
         infoHead: "infoHead",
-        infoTxt: "infoTxt"
+        infoTxt: "infoTxt",
+        txtInput: "txtInput",
+        settingsBlur: "settings--blur",
+        btnSend: "btnSend",
+        btnSave: "btnSave",
+        btnSettings: "btnSettings",
+        portList: "portList",
+        baudList: "baudList"
     }
 
     var openSaveFileDialog = function() {
@@ -157,44 +191,58 @@ var UIController = (function() {
         return filePath;
     }
 
+    var foundInList = function(opt, list) {
+        var found = false;
+        list.forEach( (li) => {
+            if( li === opt ) {
+                found = true;
+            }
+        })
+
+        return found;
+    }
+
+    var cboOptionsToList = function(cboBox) {
+        var list = [];
+
+        if(cboBox.options.length < 1)
+            return list;
+
+        for( var i=0; i < cboBox.options.length; i++ ) {
+            list.push(cboBox.options[i].text);
+        }
+
+        return list;
+    }
+
     return {
         openSettingsWindow: function() {
-            var settingsWin = new remote.BrowserWindow( {
-                height: 320,
-                width: 320,
-                parent: parentWindow,
-                modal: true
-            });
-
-            var htmlPath = path.join('file://', __dirname,'../settings.html');
-            var parentPos = parentWindow.getPosition();
-            settingsWin.removeMenu();
-            settingsWin.on('close', () => { settingsWin = null });
-            settingsWin.loadURL(htmlPath);
-            settingsWin.once('ready-to-show', () => {
-                settingsWin.show();
-                settingsWin.setPosition(parentPos[0], parentPos[1]);
-            })
+            document.getElementById(DOMstrings.settingsBlur).style.opacity = 1;
+            document.getElementById(DOMstrings.settingsBlur).style.zIndex = 2;
+        },
+        closeSettingsWindow: function() {
+            document.getElementById(DOMstrings.settingsBlur).style.opacity = 0;
+            document.getElementById(DOMstrings.settingsBlur).style.zIndex = -1;
         },
         openSaveDataWindow: function() {
             var dataOutput = document.getElementById(DOMstrings.serialData).textContent;
 
             if( dataOutput === "" ) {
-                alert("There is no data to be saved.");
+                this.showInfoMsg("error", "No data available.", "There is no data to be saved.");
                 return;
             }
 
             var filePath = openSaveFileDialog();
-
-            if( filePath !== "" ) {
+            console.log("Saving file at: ", filePath);
+            if( filePath !== undefined ) {
                 fs.writeFile(filePath, dataOutput, (err) => {
                     if(err) {
-                        alert(`Couldn't save file: ${err}`);
+                        this.showInfoMsg("error", "There was a problem saving.", `${err}`);
                     }
                 })
             }
             else {
-                alert("No filepath was given.");
+                this.showInfoMsg("error", "No filepath was given.", `A filepath was not given to save the file.`);
             }
         },
         appendSerialData: function(data) {
@@ -214,7 +262,7 @@ var UIController = (function() {
                 document.getElementById(DOMstrings.info_msg).style.backgroundColor = "#BF616A";
             }
             else if( type === "info" ) {
-                document.getElementById(DOMstrings.info_msg).style.backgroundColor = "#BF616A";
+                document.getElementById(DOMstrings.info_msg).style.backgroundColor = "#A3BE8C";
             }
 
             document.getElementById(DOMstrings.infoHead).textContent = header;
@@ -224,6 +272,48 @@ var UIController = (function() {
                 document.getElementById(DOMstrings.info_msg).style.opacity = 0;
                 document.getElementById(DOMstrings.info_msg).style.transform = ""
             }, 4000);
+        },
+        focusOnInput: function() {
+            document.getElementById(DOMstrings.txtInput).focus();
+        },
+        updatePortList: function(ports) {
+            if( ports.length < 1 )
+                return;
+
+            var cboPorts = document.getElementById(DOMstrings.portList);
+
+            // Remove old ports
+            for( var i=0; i < cboPorts.options.length; i++ ) {
+                if( !foundInList(cboPorts.options[i].text, ports) ) {
+                    console.log("Removing: ", cboPorts.options[i].text);
+                    // The option was not found in the port list.. Remove it
+                    cboPorts.remove(i);
+                }
+            }
+
+            var cboOptionsList = cboOptionsToList(cboPorts);
+
+            // Add new ports
+            ports.forEach( (port) => {
+                if( !foundInList(port, cboOptionsList) ) {
+                    console.log("Adding: ", port);
+                    var option = document.createElement("option");
+                    option.text = port;
+                    cboPorts.add(option);
+                }
+            })
+        },
+        getSelectedPath: function() {
+            var cboPorts = document.getElementById(DOMstrings.portList);
+            var index = cboPorts.selectedIndex;
+
+            return cboPorts.options[index].text;
+        },
+        getSelectedBaud: function() {
+            var cboBaud = document.getElementById(DOMstrings.baudList);
+            var index = cboBaud.selectedIndex;
+
+            return parseInt(cboBaud.options[index].text);
         }
     }
 })();
@@ -231,95 +321,65 @@ var UIController = (function() {
 var controller = (function(dataCtrl, UICtrl) {
 
     var availablePorts = [];
-    var menuTopBar;
 
     var CB_dataRcvd = function(incoming) {
         UICtrl.appendSerialData(incoming);
     }
 
+    var timer_updatePorts = function() {
+        retrievePortList();
+        UICtrl.updatePortList(availablePorts);
+
+        setTimeout(timer_updatePorts, 500);
+    }
+
     var retrievePortList = function() {
         // Retrieve the currently available ports.
         dataCtrl.getAvailableSerialPorts().then( (ports) => {
-            console.log("Available ports: ", ports);
-
             // Store the available ports list
             availablePorts = ports;
         })
     }
 
-    var enableMenuItem = function(btn, en) {
-        if( btn === 'connect' ) {
-            menuTopBar[1][1].enabled = en;
-        }
-        else if( btn === 'disconnect' ) {
-            menuTopBar[1][2].enabled = en;
-        }
-    }
+    var createEventListeners = function() {
+        document.getElementById("btnSettings").addEventListener("click", () => {
+            UICtrl.openSettingsWindow();
+        })
 
-    var createMenuBar = function() {
-        menuTopBar = remote.Menu.buildFromTemplate([
-            {
-                label: 'File',
-                submenu: [
-                    {
-                        label: 'Save output',
-                        click() { UICtrl.openSaveDataWindow() }
-                    },
-                    {
-                        label:'Quit',
-                        click () { remote.app.quit() }
-                    }
-                ]
-            },
-            {
-                label: 'Settings',
-                submenu: [
-                    {
-                        label:'COM Settings',
-                        click () { UICtrl.openSettingsWindow(); }
-                    },
-                    {
-                        label:'Connect',
-                        enabled: false,
-                        click () {
-                            var settings = dataCtrl.getPortSettings();
+        document.getElementById("btnSettingsClose").addEventListener("click", () => {
+            UICtrl.closeSettingsWindow();
+        })
 
-                            if( dataCtrl.portConnect() ) {
-                                UICtrl.showInfoMsg("info", "CONNECTED", `Connected to ${settings.path} at ${settings.baud} baud.`);
-                            }
-                            else {
-                                UICtrl.showInfoMsg("error", "ERROR", `Could not connect to ${settings.path}`);
-                            }
-                        }
-                    },
-                    {
-                        label:'Disconnect',
-                        enabled: false,
-                        click() { dataCtrl.portDisconnect() }
-                    },
-                    {
-                        label:'Refresh',
-                        click () {
-                            retrievePortList();
-                        }
-                    }
-                ]
+        document.getElementById("btnSettingsApply").addEventListener("click", () => {
+            var path = UICtrl.getSelectedPath();
+            var baud = UICtrl.getSelectedBaud();
+
+            UICtrl.closeSettingsWindow();
+
+            if( dataCtrl.updatePortSettings(path, baud) ) {
+                UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
             }
-        ])
+        })
 
-        remote.Menu.setApplicationMenu(menuTopBar);
-    };
+        document.getElementById("btnSave").addEventListener("click", () => {
+            UICtrl.openSaveDataWindow();
+        })
+    }
 
     return {
         init: function() {
-            // Create the top menu-bar
-            createMenuBar();
+            // Create our event listeners for the UI
+            createEventListeners();
 
-            // Retrieve a list of available ports
-            retrievePortList();
+            // Kick off our timer responsible or retrieving
+            // available ports
+            timer_updatePorts();
 
             // Setup the callback for new data
             dataCtrl.setupDataCB( CB_dataRcvd );
+
+            // Focus the input on the txt field.
+            UICtrl.focusOnInput();
         }
     }
 })(dataController, UIController);

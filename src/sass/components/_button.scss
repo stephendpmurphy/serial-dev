@@ -3,17 +3,18 @@
     &:link,
     &:visited {
         font-size: 1.6rem;
-        border:1px solid #2E3440;
         display:inline-block;
         cursor:pointer;
-
+        border-radius: 3px;
         color:#ECEFF4;
         text-decoration:none;
         text-shadow:0px -1px 0px #434C5E;
-        box-shadow: 0 1rem 1.5rem rgba(#000, .3);
+        box-shadow: 0 1rem 1.5rem rgba(#000, .4);
 
-        margin-left: 1rem;
-        padding:.9rem 1.8rem;
+        margin-right: .5rem;
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+        padding: .3rem .5rem;
 
         transition: all .1s;
     }
@@ -25,6 +26,10 @@
 
     &:active {
         transform: translateY(-1px);
+    }
+
+    &--image {
+        transform: translateY(3px);
     }
 
     &--red {

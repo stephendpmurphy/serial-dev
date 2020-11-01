@@ -1,0 +1,90 @@
+Disp telem. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp telem. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp climate. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp climate. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp telem. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp telem. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp climate. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp climate. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp telem. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp telem. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp climate. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp climate. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp telem. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp telem. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp climate. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp climate. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+
+Disp telem. Begin exit transition
+Start new animation. start_X: 0  start_Y: 0
+end_X: 160  end_Y: 160
+
+Disp telem. Begin enter transition
+Start new animation. start_X: 0  start_Y: -32
+end_X: 0  end_Y: 0
+Start new animation. start_X: 0  start_Y: 32
+end_X: 0  end_Y: 0
+

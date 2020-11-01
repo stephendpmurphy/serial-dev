@@ -1,0 +1,12 @@
+.comboBox {
+    &--div {
+        display: flex;
+        flex-direction: row;
+        margin-left: 5rem;
+        margin-bottom: 1rem;
+    }
+
+    &--list {
+        margin-left: 1rem;
+    }
+}

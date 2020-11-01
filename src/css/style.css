@@ -1,3 +1,6 @@
+.floatRight {
+  float: right; }
+
 * {
   margin: 0;
   padding: 0; }
@@ -20,15 +23,17 @@ body {
 
 .btn, .btn:link, .btn:visited {
   font-size: 1.6rem;
-  border: 1px solid #2E3440;
   display: inline-block;
   cursor: pointer;
+  border-radius: 3px;
   color: #ECEFF4;
   text-decoration: none;
   text-shadow: 0px -1px 0px #434C5E;
-  box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.3);
-  margin-left: 1rem;
-  padding: .9rem 1.8rem;
+  box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.4);
+  margin-right: .5rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  padding: .3rem .5rem;
   transition: all .1s; }
 
 .btn:hover {
@@ -37,6 +42,9 @@ body {
 
 .btn:active {
   transform: translateY(-1px); }
+
+.btn--image {
+  transform: translateY(3px); }
 
 .btn--red {
   background-color: #BF616A; }
@@ -64,8 +72,9 @@ body {
   background: #D08770; }
 
 .info-msg {
+  right: 3rem;
   right: -50rem;
-  bottom: 5rem;
+  bottom: 8rem;
   position: absolute;
   width: 25rem;
   height: 9rem;
@@ -81,6 +90,7 @@ body {
   padding-top: 1.5rem;
   padding-bottom: 0.5rem;
   font-size: 1.6rem;
+  font-weight: 500;
   border-bottom: 1px solid #ECEFF4; }
 
 .info-msg--txt {
@@ -88,26 +98,91 @@ body {
   padding-left: 1.5rem;
   font-size: 1.2rem; }
 
+.txtInput {
+  width: 100%;
+  margin: .5rem;
+  padding-left: .5rem;
+  background-color: #2E3440;
+  color: #ECEFF4;
+  outline: none;
+  border: 0px none;
+  box-shadow: inset 0 .25rem .5rem black; }
+
+.comboBox--div {
+  display: flex;
+  flex-direction: row;
+  margin-left: 5rem;
+  margin-bottom: 1rem; }
+
+.comboBox--list {
+  margin-left: 1rem; }
+
 .serialMonitor {
   height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column; }
 
+.settings--blur {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  opacity: 0;
+  z-index: -1;
+  transition: all .25s; }
+
+.settings--win {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+  width: 40rem;
+  height: 25rem;
+  background-color: #2E3440;
+  border: 1px solid #434C5E;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
+  transition: all .2s;
+  opacity: 1;
+  border-radius: 2px;
+  padding: 5rem; }
+
+.settings--header {
+  border-bottom: 2px solid #ECEFF4;
+  margin-bottom: 2rem; }
+
+.settings--set {
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column; }
+
 /* Data output and window controls */
-.dataDiv {
+.serial--div {
   background-color: #434C5E;
-  padding: 1rem;
+  padding-top: .5rem;
+  padding-right: .5rem;
+  padding-left: .5rem;
   flex: 1;
   display: flex;
   flex-direction: column; }
 
-.serialData {
+.serial--data {
   background-color: #2E3440;
   color: #ECEFF4;
   padding: 1rem;
   flex: 1 1 0;
   overflow-y: auto;
   overflow-x: auto;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   box-shadow: inset 0 1rem 3rem black; }
+
+.input--div {
+  background-color: #434C5E;
+  display: flex;
+  flex-direction: row; }
+
+.input--win {
+  display: flex;
+  flex-direction: column; }
