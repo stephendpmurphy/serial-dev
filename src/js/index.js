@@ -169,18 +169,19 @@ var dataController = (function() {
 
 var UIController = (function() {
     var saveDialog = remote.dialog;
-    var parentWindow = remote.BrowserWindow.getFocusedWindow();
 
     var DOMstrings = {
-        serialData: "dataOutput",
-        info_msg: "info-msg",
+        infoBox: "info-msg",
         infoHead: "infoHead",
         infoTxt: "infoTxt",
         txtInput: "txtInput",
+        txtOutput: "dataOutput",
         settingsBlur: "settings--blur",
         btnSend: "btnSend",
         btnSave: "btnSave",
-        btnSettings: "btnSettings",
+        btnSettingsOpen: "btnSettings",
+        btnSettingsClose: "btnSettingsClose",
+        btnSettingsApply: "btnSettingsApply",
         portList: "portList",
         baudList: "baudList"
     }
@@ -225,7 +226,7 @@ var UIController = (function() {
             document.getElementById(DOMstrings.settingsBlur).style.zIndex = -1;
         },
         openSaveDataWindow: function() {
-            var dataOutput = document.getElementById(DOMstrings.serialData).textContent;
+            var dataOutput = document.getElementById(DOMstrings.txtOutput).textContent;
 
             if( dataOutput === "" ) {
                 this.showInfoMsg("error", "No data available.", "There is no data to be saved.");
@@ -246,31 +247,34 @@ var UIController = (function() {
             }
         },
         appendSerialData: function(data) {
-            document.getElementById(DOMstrings.serialData).textContent += `${data}\n`;
+            document.getElementById(DOMstrings.txtOutput).textContent += `${data}\n`;
 
-            var elem = document.getElementById(DOMstrings.serialData);
+            var elem = document.getElementById(DOMstrings.txtOutput);
             elem.scrollTop = elem.scrollHeight;
         },
         clearSerialData: function() {
-            document.getElementById(DOMstrings.serialData).textContent = "";
+            document.getElementById(DOMstrings.txtOutput).textContent = "";
         },
         showInfoMsg: function(type, header, msg) {
-            document.getElementById(DOMstrings.info_msg).style.opacity = 1;
-            document.getElementById(DOMstrings.info_msg).style.WebkitTransform = "translate(-53rem, 0)";
-
             if( type === "error" ) {
-                document.getElementById(DOMstrings.info_msg).style.backgroundColor = "#BF616A";
+                document.getElementById(DOMstrings.infoBox).style.backgroundColor = "#BF616A";
             }
             else if( type === "info" ) {
-                document.getElementById(DOMstrings.info_msg).style.backgroundColor = "#A3BE8C";
+                document.getElementById(DOMstrings.infoBox).style.backgroundColor = "#A3BE8C";
+            }
+            else {
+                return;
             }
 
             document.getElementById(DOMstrings.infoHead).textContent = header;
             document.getElementById(DOMstrings.infoTxt).textContent = msg;
 
+            document.getElementById(DOMstrings.infoBox).style.opacity = 1;
+            document.getElementById(DOMstrings.infoBox).style.WebkitTransform = "translate(-53rem, 0)";
+
             setTimeout(() => {
-                document.getElementById(DOMstrings.info_msg).style.opacity = 0;
-                document.getElementById(DOMstrings.info_msg).style.transform = ""
+                document.getElementById(DOMstrings.infoBox).style.opacity = 0;
+                document.getElementById(DOMstrings.infoBox).style.transform = ""
             }, 4000);
         },
         focusOnInput: function() {
@@ -323,6 +327,9 @@ var UIController = (function() {
             var index = cboBaud.selectedIndex;
 
             return parseInt(cboBaud.options[index].text);
+        },
+        getDOMstrings: function() {
+            return DOMstrings;
         }
     }
 })();
@@ -352,15 +359,17 @@ var controller = (function(dataCtrl, UICtrl) {
     }
 
     var createEventListeners = function() {
-        document.getElementById("btnSettings").addEventListener("click", () => {
+        var DOM = UICtrl.getDOMstrings();
+
+        document.getElementById(DOM.btnSettingsOpen).addEventListener("click", () => {
             UICtrl.openSettingsWindow();
         })
 
-        document.getElementById("btnSettingsClose").addEventListener("click", () => {
+        document.getElementById(DOM.btnSettingsClose).addEventListener("click", () => {
             UICtrl.closeSettingsWindow();
         })
 
-        document.getElementById("btnSettingsApply").addEventListener("click", () => {
+        document.getElementById(DOM.btnSettingsApply).addEventListener("click", () => {
             var path = UICtrl.getSelectedPath();
             var baud = UICtrl.getSelectedBaud();
 
@@ -371,7 +380,7 @@ var controller = (function(dataCtrl, UICtrl) {
             }
         })
 
-        document.getElementById("btnSave").addEventListener("click", () => {
+        document.getElementById(DOM.btnSave).addEventListener("click", () => {
             UICtrl.openSaveDataWindow();
         })
     }
