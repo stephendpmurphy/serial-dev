@@ -7,7 +7,6 @@ const path = require('path');
 
 var dataController = (function() {
 
-    // Parser for turning a byte buffer into an ascii string
     var serialPort = {
         parser: null,
         port: null,
@@ -15,20 +14,16 @@ var dataController = (function() {
             path: null,
             baud: null
         },
-        isConfigured: false
+        CB_dataRcvd: null
     }
 
-    var CB_dataRcvd;
-
-    var openPort = function(path, baud) {
+    var instantiatePort = function(path, baud) {
         serialPort.port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
-            console.log(`${err}`);
             if(err) {
                 console.log("Error: ", err);
                 return false;
             }
             else {
-                console.log("No errors");
                 return true;
             }
         })
@@ -52,7 +47,6 @@ var dataController = (function() {
             try {
                 SerialPort.list().then((ports, err) => {
                     if (err) {
-                        alert(`There was a problem searching for ports: ${err}`);
                         console.log("Error: ", err.message);
                     }
 
@@ -76,10 +70,10 @@ var dataController = (function() {
             return portList;
         },
         getPortSettings: function() {
-            return serialPort.portSettings;
+            return serialPort.settings;
         },
         updatePortSettings: function(path, baud) {
-            if( (typeof(path) !== 'string') && path === "" )
+            if( (typeof(path) !== 'string') || path === "" )
                 return false;
 
             if( (typeof(baud) !== 'number') || baud === 0 )
@@ -92,13 +86,13 @@ var dataController = (function() {
 
             console.log(`Connecting to ${serialPort.settings.path} @ ${serialPort.settings.baud} baud`);
 
-            openPort(serialPort.settings.path, serialPort.settings.baud);
+            instantiatePort(serialPort.settings.path, serialPort.settings.baud);
 
             serialPort.parser = serialPort.port.pipe(new Readline({delimeter: '\n'}))
 
             serialPort.parser.on('data', (data) => {
-                var newData = removeAnsiCodes(data);
-                CB_dataRcvd(newData);
+                var strippedData = removeAnsiCodes(data);
+                serialPort.CB_dataRcvd(strippedData);
             })
 
             serialPort.port.on('open', () => {
@@ -120,11 +114,13 @@ var dataController = (function() {
                     return false;
                 }
 
-                openPort(portSettings.path, portSettings.baud);
+                instantiatePort(portSettings.path, portSettings.baud);
 
-                if( serialPort.port !== undefined ) {
+                if( (serialPort.port !== undefined) || (serialPort.port !== null) ) {
                     console.log("Opening");
-                    return serialPort.port.open();
+                    serialPort.port.open();
+
+                    return true;
                 }
                 else
                 {
@@ -132,6 +128,7 @@ var dataController = (function() {
                 }
             }
             catch(err) {
+                console.log("There was a problem opening the port: ", err);
                 return false;
             }
 
@@ -139,7 +136,7 @@ var dataController = (function() {
         portDisconnect: function() {
             console.log("Closing port");
             try {
-                if( serialPort.port !== undefined ) {
+                if( (serialPort.port !== undefined) || (serialPort.port !== null) ) {
                     return serialPort.port.close();
                 }
                 else
@@ -148,21 +145,14 @@ var dataController = (function() {
                 }
             }
             catch(err) {
-                return false;
-            }
-        },
-        isPortOpen: function() {
-            if(port !== undefined) {
-                return serialPort.port.isOpen;
-            }
-            else {
+                console.log("There was a problem closing the port: ", err);
                 return false;
             }
         },
         setupDataCB: function(cb) {
             if( cb !== null )
                 console.log("Data Rcvd CB setup.");
-                CB_dataRcvd = cb;
+                serialPort.CB_dataRcvd = cb;
         }
     }
 })();
@@ -176,12 +166,12 @@ var UIController = (function() {
         infoTxt: "infoTxt",
         txtInput: "txtInput",
         txtOutput: "txtOutput",
-        settingsWin: "settingsWin",
         btnSend: "btnSend",
         btnSave: "btnSave",
         btnSettingsOpen: "btnSettings",
         btnSettingsClose: "btnSettingsClose",
         btnSettingsApply: "btnSettingsApply",
+        settingsWin: "settingsWin",
         cboPortList: "cboPortList",
         cboBaudList: "cboBaudList"
     }
@@ -337,7 +327,7 @@ var UIController = (function() {
 var controller = (function(dataCtrl, UICtrl) {
 
     var availablePorts = [];
-    var availableBaudRates = [ 9600, 115200];
+    var availableBaudRates = [110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 256000];
 
     var CB_dataRcvd = function(incoming) {
         UICtrl.appendSerialData(incoming);
@@ -390,19 +380,19 @@ var controller = (function(dataCtrl, UICtrl) {
             // Create our event listeners for the UI
             createEventListeners();
 
-            // Kick off our timer responsible or retrieving
-            // available ports
-            timer_updatePorts();
+            // Setup the callback for new data
+            dataCtrl.setupDataCB( CB_dataRcvd );
 
             // Init the baudrate combo box with our available
             // baud rates.
             UICtrl.setAvailableBaudRates(availableBaudRates);
 
-            // Setup the callback for new data
-            dataCtrl.setupDataCB( CB_dataRcvd );
-
             // Focus the input on the txt field.
             UICtrl.focusOnInput();
+
+            // Kick off our timer responsible or retrieving
+            // available ports
+            timer_updatePorts();
         }
     }
 })(dataController, UIController);
