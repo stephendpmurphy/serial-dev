@@ -1,12 +1,13 @@
+const {remote} = require('electron');
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 const ansiRegex = require('ansi-regex');
-const {remote} = require('electron');
 const fs = require('fs');
-const path = require('path');
 
 var dataController = (function() {
 
+    // Data controller state variable holding
+    // everything needed for serial port communication
     var serialPort = {
         parser: null,
         port: null,
@@ -14,21 +15,11 @@ var dataController = (function() {
             path: null,
             baud: null
         },
+        isConfigured: false,
         CB_dataRcvd: null
     }
 
-    var instantiatePort = function(path, baud) {
-        serialPort.port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
-            if(err) {
-                console.log("Error: ", err);
-                return false;
-            }
-            else {
-                return true;
-            }
-        })
-    }
-
+    // Remove ANSI codes from the provided ASCII string
     var removeAnsiCodes = function(string) {
         if( typeof string === 'string' ) {
             var str
@@ -40,7 +31,50 @@ var dataController = (function() {
         }
     }
 
+    // Instantiate a new SerialPort object using the provided serial port path
+    // and baud rate
+    var instantiatePort = function(path, baud) {
+        // Create a new serial port object using the path and badurate sepcified.
+        // Set auto-open to false meaning the portConnect API must be called before
+        // data will begin to come through
+        serialPort.port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
+            if(err) {
+                console.log("Error: ", err);
+                return false;
+            }
+            else {
+                return true;
+            }
+        })
+
+        // Attach a parser that searches for the specified delimeter before sending
+        // data through on the "data" event.
+        serialPort.parser = serialPort.port.pipe(new Readline({delimeter: '\n'}))
+
+        // Create the new "data" even CB which strips ANSI codes from the string,
+        // and then call ours CB for our controller to consumer and then display
+        serialPort.parser.on('data', (data) => {
+            var strippedData = removeAnsiCodes(data);
+            serialPort.CB_dataRcvd(strippedData);
+        })
+
+        // When the port is open, emit a console message
+        serialPort.port.on('open', () => {
+            console.log("Port opened.");
+        })
+
+        // When the port is closed, emit a console message
+        serialPort.port.on('close', () => {
+            console.log("Port closed.");
+        })
+
+        return true;
+    }
+
+    // Data Controller API
     return {
+        // Retrieve available serial port paths and populate a port list to be
+        // sent back to the caller
         getAvailableSerialPorts: async function() {
             var portList = [];
 
@@ -69,9 +103,12 @@ var dataController = (function() {
 
             return portList;
         },
+        // Return the current Serial Port settings
         getPortSettings: function() {
             return serialPort.settings;
         },
+        // Update the Serial Port path and baud rate. Return the state of updating
+        // the port settings
         updatePortSettings: function(path, baud) {
             if( (typeof(path) !== 'string') || path === "" )
                 return false;
@@ -86,44 +123,24 @@ var dataController = (function() {
 
             console.log(`Connecting to ${serialPort.settings.path} @ ${serialPort.settings.baud} baud`);
 
-            instantiatePort(serialPort.settings.path, serialPort.settings.baud);
+            serialPort.isConfigured = instantiatePort(serialPort.settings.path, serialPort.settings.baud);
 
-            serialPort.parser = serialPort.port.pipe(new Readline({delimeter: '\n'}))
-
-            serialPort.parser.on('data', (data) => {
-                var strippedData = removeAnsiCodes(data);
-                serialPort.CB_dataRcvd(strippedData);
-            })
-
-            serialPort.port.on('open', () => {
-                console.log("Port opened.");
-            })
-
-            serialPort.port.on('close', () => {
-                console.log("Port closed.");
-            })
-
-            serialPort.port.open();
-
-            return true;
+            return serialPort.isConfigured;
         },
+        // Connect to the port, checking if it has been properly configured, and the serial port object
+        // is not undefined or null
         portConnect: function() {
+            console.log("Opening port");
             try {
-                if( (portSettings.path === undefined) || portSettings.baud !== undefined ) {
-                    console.log("Problem found with settings");
-                    return false;
-                }
-
-                instantiatePort(portSettings.path, portSettings.baud);
-
-                if( (serialPort.port !== undefined) || (serialPort.port !== null) ) {
-                    console.log("Opening");
+                if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
                     serialPort.port.open();
-
                     return true;
                 }
-                else
-                {
+                else if( instantiatePort(portSettings.path, portSettings.baud) ) {
+                    serialPort.port.open();
+                    return true;
+                }
+                else {
                     return false;
                 }
             }
@@ -131,12 +148,13 @@ var dataController = (function() {
                 console.log("There was a problem opening the port: ", err);
                 return false;
             }
-
         },
+        // Disconnect the port, checking if it has been properly configured, and the serial port object
+        // is not undefined or null
         portDisconnect: function() {
             console.log("Closing port");
             try {
-                if( (serialPort.port !== undefined) || (serialPort.port !== null) ) {
+                if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
                     return serialPort.port.close();
                 }
                 else
@@ -149,6 +167,7 @@ var dataController = (function() {
                 return false;
             }
         },
+        // Setup a callback to be executed any time new data is received over the serial port.
         setupDataCB: function(cb) {
             if( cb !== null )
                 console.log("Data Rcvd CB setup.");
@@ -160,6 +179,7 @@ var dataController = (function() {
 var UIController = (function() {
     var saveDialog = remote.dialog;
 
+    // DOM strings
     var DOMstrings = {
         infoBox: "infoBox",
         infoHead: "infoHead",
@@ -176,12 +196,15 @@ var UIController = (function() {
         cboBaudList: "cboBaudList"
     }
 
+    // Open a save file dialog to save the serial data output screen
     var openSaveFileDialog = function() {
         var filePath = saveDialog.showSaveDialogSync(null);
 
         return filePath;
     }
 
+    // Check if a provided option can be found in the given
+    // list.
     var foundInList = function(opt, list) {
         var found = false;
         list.forEach( (li) => {
@@ -193,6 +216,8 @@ var UIController = (function() {
         return found;
     }
 
+    // Convert an HTML combo box option list into an
+    // array containing the option text
     var cboOptionsToList = function(cboBox) {
         var list = [];
 
@@ -206,15 +231,20 @@ var UIController = (function() {
         return list;
     }
 
+    // UI Controller API
     return {
+        // Open the settings modal window
         openSettingsWindow: function() {
             document.getElementById(DOMstrings.settingsWin).style.opacity = 1;
             document.getElementById(DOMstrings.settingsWin).style.zIndex = 2;
         },
+        // CLose the settings modal window
         closeSettingsWindow: function() {
             document.getElementById(DOMstrings.settingsWin).style.opacity = 0;
             document.getElementById(DOMstrings.settingsWin).style.zIndex = -1;
         },
+        // Open a save window dialog and then write a file to the returned
+        // file system path if one is given.
         openSaveDataWindow: function() {
             var dataOutput = document.getElementById(DOMstrings.txtOutput).textContent;
 
@@ -236,15 +266,18 @@ var UIController = (function() {
                 this.showInfoMsg("error", "No filepath was given.", `A filepath was not given to save the file.`);
             }
         },
+        // Add serial data to the monitor window
         appendSerialData: function(data) {
             document.getElementById(DOMstrings.txtOutput).textContent += `${data}\n`;
 
             var elem = document.getElementById(DOMstrings.txtOutput);
             elem.scrollTop = elem.scrollHeight;
         },
+        // Clear the serial data window
         clearSerialData: function() {
             document.getElementById(DOMstrings.txtOutput).textContent = "";
         },
+        // Show a dialog message in the bottom of the screen
         showInfoMsg: function(type, header, msg) {
             if( type === "error" ) {
                 document.getElementById(DOMstrings.infoBox).style.backgroundColor = "#BF616A";
@@ -267,9 +300,11 @@ var UIController = (function() {
                 document.getElementById(DOMstrings.infoBox).style.transform = ""
             }, 4000);
         },
+        // Focus input on the text input field
         focusOnInput: function() {
             document.getElementById(DOMstrings.txtInput).focus();
         },
+        // Update the port list combo box within the settings screen
         updatePortList: function(ports) {
             if( ports.length < 1 )
                 return;
@@ -297,6 +332,7 @@ var UIController = (function() {
                 }
             })
         },
+        // Set the available baud rates combo box using the provided list
         setAvailableBaudRates: function(baudList) {
             var cboBauds = document.getElementById(DOMstrings.cboBaudList);
 
@@ -306,33 +342,41 @@ var UIController = (function() {
                 cboBauds.add(option);
             })
         },
+        // Get the current selected serial port path
         getSelectedPath: function() {
             var cboPorts = document.getElementById(DOMstrings.cboPortList);
             var index = cboPorts.selectedIndex;
 
             return cboPorts.options[index].text;
         },
+        // Get the current selected serial port baud rate
         getSelectedBaud: function() {
             var cboBaud = document.getElementById(DOMstrings.cboBaudList);
             var index = cboBaud.selectedIndex;
 
             return parseInt(cboBaud.options[index].text);
         },
+        // Get the DOM strings used in our HTMl
         getDOMstrings: function() {
             return DOMstrings;
         }
     }
 })();
 
+// Main App controller
 var controller = (function(dataCtrl, UICtrl) {
 
     var availablePorts = [];
     var availableBaudRates = [110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 256000];
 
+    // Callback to be fired when new data is retrieved. This then
+    // appends serial data using the UI controller API
     var CB_dataRcvd = function(incoming) {
         UICtrl.appendSerialData(incoming);
     }
 
+    // Timer used to retrieve a port list, and then display it using the
+    // UI controller API. We then reschedule this function to be fired again.
     var timer_updatePorts = function() {
         retrievePortList();
         UICtrl.updatePortList(availablePorts);
@@ -340,6 +384,7 @@ var controller = (function(dataCtrl, UICtrl) {
         setTimeout(timer_updatePorts, 500);
     }
 
+    // Retrieve an available port list using the data controller API.
     var retrievePortList = function() {
         // Retrieve the currently available ports.
         dataCtrl.getAvailableSerialPorts().then( (ports) => {
@@ -348,6 +393,7 @@ var controller = (function(dataCtrl, UICtrl) {
         })
     }
 
+    // Create our UI event listeners
     var createEventListeners = function() {
         var DOM = UICtrl.getDOMstrings();
 
@@ -366,8 +412,13 @@ var controller = (function(dataCtrl, UICtrl) {
             UICtrl.closeSettingsWindow();
 
             if( dataCtrl.updatePortSettings(path, baud) ) {
-                UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
+                if( dataCtrl.portConnect() ) {
+                    UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
+                    return;
+                }
             }
+
+            UICtrl.showInfoMsg("error", "Could not connect.", "Failed to connect to the requested serial port.");
         })
 
         document.getElementById(DOM.btnSave).addEventListener("click", () => {
@@ -375,6 +426,7 @@ var controller = (function(dataCtrl, UICtrl) {
         })
     }
 
+    // Main app controller API
     return {
         init: function() {
             // Create our event listeners for the UI
@@ -397,4 +449,5 @@ var controller = (function(dataCtrl, UICtrl) {
     }
 })(dataController, UIController);
 
+// Call the app controller init to kick off the application.
 controller.init();
