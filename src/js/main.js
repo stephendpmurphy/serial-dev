@@ -15,6 +15,11 @@ function createWindow () {
     icon: path.join(__dirname, "../img/zap.png")
   })
 
+  win.webContents.on('new-window', (e, url) => {
+      e.preventDefault();
+      require('electron').shell.openExternal(url);
+  })
+
   win.removeMenu();
   win.loadFile('src/index.html');
 

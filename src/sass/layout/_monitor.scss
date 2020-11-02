@@ -75,3 +75,32 @@
         flex-direction: row;
     }
 }
+
+.footer {
+    & {
+        font-size: 1.2rem;
+        background-color: $color-primary-light;
+        display: flex;
+        flex-direction: row;
+        padding: .5rem;
+    }
+
+    &--status {
+        text-align: left;
+        width: 50%;
+    }
+
+    &--info {
+        text-align: right;
+        width: 50%;
+    }
+}
+
+a {
+    &,
+    &:visited {
+        text-decoration: none;
+        color: $color-white;
+        border-bottom: 1px dotted $color-white
+    }
+}

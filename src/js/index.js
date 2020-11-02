@@ -186,6 +186,7 @@ var UIController = (function() {
         infoTxt: "infoTxt",
         txtInput: "txtInput",
         txtOutput: "txtOutput",
+        txtStatus: "txtStatus",
         btnSend: "btnSend",
         btnSave: "btnSave",
         btnSettingsOpen: "btnSettings",
@@ -294,7 +295,7 @@ var UIController = (function() {
             document.getElementById(DOMstrings.infoTxt).textContent = msg;
 
             document.getElementById(DOMstrings.infoBox).style.opacity = 1;
-            document.getElementById(DOMstrings.infoBox).style.WebkitTransform = "translate(-53rem, 0)";
+            document.getElementById(DOMstrings.infoBox).style.WebkitTransform = "translate(-52rem, 0)";
 
             setTimeout(() => {
                 document.getElementById(DOMstrings.infoBox).style.opacity = 0;
@@ -360,6 +361,10 @@ var UIController = (function() {
         // Get the DOM strings used in our HTMl
         getDOMstrings: function() {
             return DOMstrings;
+        },
+        setStatus: function(stat) {
+            var status = document.getElementById(DOMstrings.txtStatus);
+            status.textContent = stat;
         }
     }
 })();
@@ -415,11 +420,13 @@ var controller = (function(dataCtrl, UICtrl) {
             if( dataCtrl.updatePortSettings(path, baud) ) {
                 if( dataCtrl.portConnect() ) {
                     UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
+                    UICtrl.setStatus(`Connected to ${path} @ ${baud} baud`);
                     return;
                 }
             }
 
             UICtrl.showInfoMsg("error", "Could not connect.", "Failed to connect to the requested serial port.");
+            UICtrl.setStatus('Disconnected');
         })
 
         document.getElementById(DOM.btnSave).addEventListener("click", () => {
