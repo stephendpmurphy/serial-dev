@@ -303,6 +303,15 @@ var UIController = (function() {
                 }
             })
         },
+        setAvailableBaudRates: function(baudList) {
+            var cboBauds = document.getElementById(DOMstrings.baudList);
+
+            baudList.forEach( (baud) => {
+                var option = document.createElement("option");
+                option.text = baud;
+                cboBauds.add(option);
+            })
+        },
         getSelectedPath: function() {
             var cboPorts = document.getElementById(DOMstrings.portList);
             var index = cboPorts.selectedIndex;
@@ -321,6 +330,7 @@ var UIController = (function() {
 var controller = (function(dataCtrl, UICtrl) {
 
     var availablePorts = [];
+    var availableBaudRates = [ 9600, 115200];
 
     var CB_dataRcvd = function(incoming) {
         UICtrl.appendSerialData(incoming);
@@ -374,6 +384,10 @@ var controller = (function(dataCtrl, UICtrl) {
             // Kick off our timer responsible or retrieving
             // available ports
             timer_updatePorts();
+
+            // Init the baudrate combo box with our available
+            // baud rates.
+            UICtrl.setAvailableBaudRates(availableBaudRates);
 
             // Setup the callback for new data
             dataCtrl.setupDataCB( CB_dataRcvd );
