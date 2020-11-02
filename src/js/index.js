@@ -156,7 +156,8 @@ var dataController = (function() {
             console.log("Closing port");
             try {
                 if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
-                    return serialPort.port.close();
+                    serialPort.port.close();
+                    return;
                 }
                 else
                 {
@@ -210,7 +211,8 @@ var UIController = (function() {
         btnSave: "btnSave",
         btnSettingsOpen: "btnSettings",
         btnSettingsClose: "btnSettingsClose",
-        btnSettingsApply: "btnSettingsApply",
+        btnMonitorClear: "btnMonitorClear",
+        btnConnect: "btnConnect",
         settingsWin: "settingsWin",
         cboPortList: "cboPortList",
         cboBaudList: "cboBaudList"
@@ -434,6 +436,16 @@ var controller = (function(dataCtrl, UICtrl) {
         UICtrl.clearTxtInput();
     }
 
+    var applySettings = function() {
+        var path = UICtrl.getSelectedPath();
+        var baud = UICtrl.getSelectedBaud();
+
+        if( !dataCtrl.updatePortSettings(path, baud) ) {
+            UICtrl.showInfoMsg("error", "Could not connect.", "Failed to connect to the requested serial port.");
+            UICtrl.setStatus('Disconnected');
+        }
+    }
+
     // Create an event that fires when the enter key is depressed.
     var init_keyboard_input = function() {
         const {remote} = require('electron');
@@ -462,22 +474,38 @@ var controller = (function(dataCtrl, UICtrl) {
             UICtrl.closeSettingsWindow();
         })
 
-        document.getElementById(DOM.btnSettingsApply).addEventListener("click", () => {
-            var path = UICtrl.getSelectedPath();
-            var baud = UICtrl.getSelectedBaud();
-
+        document.getElementById(DOM.btnConnect).addEventListener("click", () => {
             UICtrl.closeSettingsWindow();
 
-            if( dataCtrl.updatePortSettings(path, baud) ) {
+            if( document.getElementById(DOM.btnConnect).innerText == "connect" ) {
+
+                applySettings();
+
                 if( dataCtrl.portConnect() ) {
+                    var path = UICtrl.getSelectedPath();
+                    var baud = UICtrl.getSelectedBaud();
                     UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
                     UICtrl.setStatus(`Connected to ${path} @ ${baud} baud`);
+                    document.getElementById(DOM.btnConnect).innerText = "disconnect";
+                    return;
+                }
+            }
+            else {
+                document.getElementById(DOM.btnConnect).innerText = "connect";
+                if( dataCtrl.portDisconnect() ) {
+                    UICtrl.showInfoMsg("error", "Disconnected.", "Serial port disconnected.");
+                    UICtrl.setStatus('Disconnected');
+                    document.getElementById(DOM.btnConnect).innerText = "connect";
                     return;
                 }
             }
 
             UICtrl.showInfoMsg("error", "Could not connect.", "Failed to connect to the requested serial port.");
             UICtrl.setStatus('Disconnected');
+        })
+
+        document.getElementById(DOM.btnMonitorClear).addEventListener("click", () => {
+            UICtrl.clearSerialData();
         })
 
         document.getElementById(DOM.btnSave).addEventListener("click", () => {

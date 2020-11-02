@@ -23,7 +23,7 @@
         bottom: 50%;
         transform: translate(-50%, 50%);
         width: 40rem;
-        height: 25rem;
+        height: 35rem;
         background-color: $color-primary-dark;
         border: 1px solid $color-primary-light;
         box-shadow: 0 1rem 2rem rgba($color-black, .5);
@@ -31,6 +31,7 @@
         padding: 5rem;
 
         &-header {
+            text-align: left;
             border-bottom: 2px solid $color-white;
             margin-bottom: 2rem;
         }
@@ -40,6 +41,10 @@
             margin-bottom: 2rem;
             display: flex;
             flex-direction: column;
+        }
+
+        &-ctrl {
+            margin-bottom: 2rem;
         }
     }
 }
