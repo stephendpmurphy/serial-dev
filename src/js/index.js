@@ -1,7 +1,3 @@
-const {remote} = require('electron');
-const SerialPort = require('serialport')
-const Readline = require('@serialport/parser-readline')
-const ansiRegex = require('ansi-regex');
 const fs = require('fs');
 
 var dataController = (function() {
@@ -21,6 +17,8 @@ var dataController = (function() {
 
     // Remove ANSI codes from the provided ASCII string
     var removeAnsiCodes = function(string) {
+        const ansiRegex = require('ansi-regex');
+
         if( typeof string === 'string' ) {
             var str
             str = string.replace(ansiRegex(), '');
@@ -34,6 +32,7 @@ var dataController = (function() {
     // Instantiate a new SerialPort object using the provided serial port path
     // and baud rate
     var instantiatePort = function(path, baud) {
+        const SerialPort = require('serialport');
         // Create a new serial port object using the path and badurate sepcified.
         // Set auto-open to false meaning the portConnect API must be called before
         // data will begin to come through
@@ -46,6 +45,8 @@ var dataController = (function() {
                 return true;
             }
         })
+
+        const Readline = require('@serialport/parser-readline');
 
         // Attach a parser that searches for the specified delimeter before sending
         // data through on the "data" event.
@@ -76,8 +77,8 @@ var dataController = (function() {
         // Retrieve available serial port paths and populate a port list to be
         // sent back to the caller
         getAvailableSerialPorts: async function() {
+            const SerialPort = require('serialport');
             var portList = [];
-
             try {
                 SerialPort.list().then((ports, err) => {
                     if (err) {
@@ -177,7 +178,6 @@ var dataController = (function() {
 })();
 
 var UIController = (function() {
-    var saveDialog = remote.dialog;
 
     // DOM strings
     var DOMstrings = {
@@ -198,7 +198,8 @@ var UIController = (function() {
 
     // Open a save file dialog to save the serial data output screen
     var openSaveFileDialog = function() {
-        var filePath = saveDialog.showSaveDialogSync(null);
+        const {remote} = require('electron');
+        var filePath = remote.dialog.showSaveDialogSync(null);
 
         return filePath;
     }
