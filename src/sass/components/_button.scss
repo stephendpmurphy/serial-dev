@@ -6,10 +6,10 @@
         display:inline-block;
         cursor:pointer;
         border-radius: 3px;
-        color:#ECEFF4;
+        color:$color-white;
         text-decoration:none;
-        text-shadow:0px -1px 0px #434C5E;
-        box-shadow: 0 1rem 1.5rem rgba(#000, .4);
+        text-shadow:0px -1px 0px $color-primary-light;
+        box-shadow: 0 1rem 1.5rem rgba($color-black, .4);
 
         margin-right: .5rem;
         margin-top: .5rem;
@@ -21,7 +21,7 @@
 
     &:hover {
         transform: translateY(-3px);
-        box-shadow: 0 1.5rem 2.2rem rgba(#000, .6);
+        box-shadow: 0 1.5rem 2.2rem rgba($color-black, .6);
     }
 
     &:active {
@@ -33,14 +33,14 @@
     }
 
     &--red {
-        background-color: #BF616A;
+        background-color: $color-red;
     }
 
     &--green {
-        background-color: #A3BE8C;
+        background-color: $color-green;
     }
 
     &--blue {
-        background-color: #5E81AC;
+        background-color: $color-blue;
     }
 }

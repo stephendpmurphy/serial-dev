@@ -171,19 +171,19 @@ var UIController = (function() {
     var saveDialog = remote.dialog;
 
     var DOMstrings = {
-        infoBox: "info-msg",
+        infoBox: "infoBox",
         infoHead: "infoHead",
         infoTxt: "infoTxt",
         txtInput: "txtInput",
-        txtOutput: "dataOutput",
-        settingsBlur: "settings--blur",
+        txtOutput: "txtOutput",
+        settingsWin: "settingsWin",
         btnSend: "btnSend",
         btnSave: "btnSave",
         btnSettingsOpen: "btnSettings",
         btnSettingsClose: "btnSettingsClose",
         btnSettingsApply: "btnSettingsApply",
-        portList: "portList",
-        baudList: "baudList"
+        cboPortList: "cboPortList",
+        cboBaudList: "cboBaudList"
     }
 
     var openSaveFileDialog = function() {
@@ -218,12 +218,12 @@ var UIController = (function() {
 
     return {
         openSettingsWindow: function() {
-            document.getElementById(DOMstrings.settingsBlur).style.opacity = 1;
-            document.getElementById(DOMstrings.settingsBlur).style.zIndex = 2;
+            document.getElementById(DOMstrings.settingsWin).style.opacity = 1;
+            document.getElementById(DOMstrings.settingsWin).style.zIndex = 2;
         },
         closeSettingsWindow: function() {
-            document.getElementById(DOMstrings.settingsBlur).style.opacity = 0;
-            document.getElementById(DOMstrings.settingsBlur).style.zIndex = -1;
+            document.getElementById(DOMstrings.settingsWin).style.opacity = 0;
+            document.getElementById(DOMstrings.settingsWin).style.zIndex = -1;
         },
         openSaveDataWindow: function() {
             var dataOutput = document.getElementById(DOMstrings.txtOutput).textContent;
@@ -284,7 +284,7 @@ var UIController = (function() {
             if( ports.length < 1 )
                 return;
 
-            var cboPorts = document.getElementById(DOMstrings.portList);
+            var cboPorts = document.getElementById(DOMstrings.cboPortList);
 
             // Remove old ports
             for( var i=0; i < cboPorts.options.length; i++ ) {
@@ -308,7 +308,7 @@ var UIController = (function() {
             })
         },
         setAvailableBaudRates: function(baudList) {
-            var cboBauds = document.getElementById(DOMstrings.baudList);
+            var cboBauds = document.getElementById(DOMstrings.cboBaudList);
 
             baudList.forEach( (baud) => {
                 var option = document.createElement("option");
@@ -317,13 +317,13 @@ var UIController = (function() {
             })
         },
         getSelectedPath: function() {
-            var cboPorts = document.getElementById(DOMstrings.portList);
+            var cboPorts = document.getElementById(DOMstrings.cboPortList);
             var index = cboPorts.selectedIndex;
 
             return cboPorts.options[index].text;
         },
         getSelectedBaud: function() {
-            var cboBaud = document.getElementById(DOMstrings.baudList);
+            var cboBaud = document.getElementById(DOMstrings.cboBaudList);
             var index = cboBaud.selectedIndex;
 
             return parseInt(cboBaud.options[index].text);
