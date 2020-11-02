@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron')
 
 function createWindow () {
   const win = new BrowserWindow({
+    backgroundColor: '#2E3440',
     width: 700,
     height: 625,
     'minHeight': 700,
@@ -12,8 +13,9 @@ function createWindow () {
     }
   })
 
-  win.loadFile('src/index.html')
   win.removeMenu();
+  win.loadFile('src/index.html');
+
 //   win.webContents.openDevTools()
 }
 
