@@ -173,6 +173,25 @@ var dataController = (function() {
             if( cb !== null )
                 console.log("Data Rcvd CB setup.");
                 serialPort.CB_dataRcvd = cb;
+        },
+        // If our serial port connection is configured, send data out with an appended \n\r
+        sendData: function(outgoing) {
+            try {
+                if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
+                    console.log("Sending: ", outgoing);
+                    outgoing = outgoing + "\n\r";
+                    serialPort.port.write(outgoing);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(err) {
+                console.log("There was a problem closing the port: ", err);
+                return false;
+            }
         }
     }
 })();
@@ -365,6 +384,14 @@ var UIController = (function() {
         setStatus: function(stat) {
             var status = document.getElementById(DOMstrings.txtStatus);
             status.textContent = stat;
+        },
+        // Retrieve the current text input value
+        getTxtInput: function() {
+            return document.getElementById(DOMstrings.txtInput).value;
+        },
+        // Clear the current text input value
+        clearTxtInput: function() {
+            document.getElementById(DOMstrings.txtInput).value = "";
         }
     }
 })();
@@ -399,9 +426,33 @@ var controller = (function(dataCtrl, UICtrl) {
         })
     }
 
+    // Retrieve the current text input, send it out the serial port
+    // and then clear the text input field
+    var sendInputData = function() {
+        var input = UICtrl.getTxtInput();
+        dataCtrl.sendData(input);
+        UICtrl.clearTxtInput();
+    }
+
+    // Create an event that fires when the enter key is depressed.
+    var init_keyboard_input = function() {
+        const {remote} = require('electron');
+        const BrowserWindow = remote.BrowserWindow;
+        const win = BrowserWindow.getFocusedWindow();
+
+        win.webContents.on("before-input-event", (event, input) => {
+            if( (input.type === "keyDown") && (input.code === "Enter") )
+                sendInputData();
+        });
+    }
+
     // Create our UI event listeners
     var createEventListeners = function() {
         var DOM = UICtrl.getDOMstrings();
+
+        document.getElementById(DOM.btnSend).addEventListener("click", () => {
+            sendInputData();
+        })
 
         document.getElementById(DOM.btnSettingsOpen).addEventListener("click", () => {
             UICtrl.openSettingsWindow();
@@ -439,6 +490,9 @@ var controller = (function(dataCtrl, UICtrl) {
         init: function() {
             // Create our event listeners for the UI
             createEventListeners();
+
+            // Init the keyboard event for the "Enter" key
+            init_keyboard_input();
 
             // Setup the callback for new data
             dataCtrl.setupDataCB( CB_dataRcvd );
