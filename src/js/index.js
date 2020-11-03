@@ -157,7 +157,7 @@ var dataController = (function() {
             try {
                 if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
                     serialPort.port.close();
-                    return;
+                    return true;
                 }
                 else
                 {
