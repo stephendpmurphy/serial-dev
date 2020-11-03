@@ -4,9 +4,11 @@
   "description": "Cross Platform Serial Monitor written using Electron and NodeJS",
   "main": "src/js/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron-forge start",
     "install": "electron-rebuild",
-    "compile:sass": "node-sass src/sass/main.scss src/css/style.css"
+    "compile:sass": "node-sass src/sass/main.scss src/css/style.css",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "repository": {
     "type": "git",
@@ -20,13 +22,46 @@
   },
   "homepage": "https://github.com/stephendpmurphy/serial-monitor#readme",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "electron": "^10.1.4",
     "electron-rebuild": "^2.3.1",
     "node-sass": "^4.14.1"
   },
   "dependencies": {
     "ansi-regex": "^5.0.0",
+    "electron-squirrel-startup": "^1.0.0",
     "nord": "^0.2.1",
     "serialport": "^9.0.2"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "serial_monitor"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin", "linux"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }

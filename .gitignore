@@ -105,3 +105,6 @@ dist
 
 # Compiled CSS
 src/css/
+
+# Electron-Forge Output folder
+out/
