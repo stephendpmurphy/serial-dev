@@ -4,6 +4,10 @@
 
 Cross Platform Serial Monitor written using Electron and NodeJS
 
+<p align="center">
+  <img src="./src/img/snapshot.png">
+</p>
+
 ## Retrieving Source
 The source is located on Github and can be retrieved by executing the following:
 ```bash
