@@ -5,6 +5,8 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
+<br />
+
 <p align="center">
   <h3 align="center">Electron Serial Monitor</h3>
   <p align="center">
@@ -16,7 +18,7 @@
 
 ## Table of Contents
 * [About the Project](#about-the-project)
-  * [Built With)[#built-with]
+  * [Built With](#built-with)
 * [Getting Started](#getting-started)
   * [Retrieving the Source](#retrieving-the-source)
   * [Installation](#installation)
