@@ -1,7 +1,12 @@
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <p align="center">
-  <h2 align="center">Electron Serial Monitor</h2>
+  <h3 align="center">Electron Serial Monitor</h3>
   <p align="center">
     Cross Platform Serial Monitor written using Electron and NodeJS
   </p>
@@ -96,13 +101,23 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Your Name - [@smurphy_iii](https://www.instagram.com/smurphy_iii/) - stephendpmurphy@msn.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [Electron Serial Monitor](https://github.com/stephendpmurphy/serial-monitor)
 
 ## Acknowledgements
 * [Feather Icons](https://feathericons.com/)
 * [Nord Theme](https://www.nordtheme.com/)
 
+[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
+[contributors-url]: https://github.com/stephendpmurphy/serial-monitor/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
+[forks-url]: https://github.com/stephendpmurphy/serial-monitor/network/members
+[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
+[stars-url]: https://github.com/stephendpmurphy/serial-monitor/stargazers
+[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
+[issues-url]: https://github.com/stephendpmurphy/serial-monitor/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
 [license-url]: https://github.com/stephendpmurphy/serial-monitor/blob/main/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/smurphy129/
