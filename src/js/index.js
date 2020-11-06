@@ -25,7 +25,7 @@ var dataController = (function() {
             return str;
         }
         else {
-            return string;
+            return "";
         }
     }
 
@@ -171,9 +171,10 @@ var dataController = (function() {
         },
         // Setup a callback to be executed any time new data is received over the serial port.
         setupDataCB: function(cb) {
-            if( cb !== null )
+            if( cb !== null ) {
                 console.log("Data Rcvd CB setup.");
                 serialPort.CB_dataRcvd = cb;
+            }
         },
         // If our serial port connection is configured, send data out with an appended \n\r
         sendData: function(outgoing) {
