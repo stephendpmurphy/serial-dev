@@ -1,6 +1,9 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
+// Check if we are in development mode
+let development = process.argv[2] === "development";
+
 function createWindow () {
   const win = new BrowserWindow({
     backgroundColor: '#2E3440',
@@ -23,7 +26,9 @@ function createWindow () {
   win.removeMenu();
   win.loadFile('src/index.html');
 
-//   win.webContents.openDevTools()
+  // if we are in development mode.. Then open the dev tools
+  if( development )
+    win.webContents.openDevTools({mode: 'undocked'});
 }
 
 app.allowRendererProcessReuse=false

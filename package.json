@@ -4,8 +4,8 @@
   "description": "Cross Platform Serial Monitor written using Electron and NodeJS",
   "main": "src/js/main.js",
   "scripts": {
-    "start": "electron-forge start",
     "install": "electron-rebuild",
+    "start": "electron-forge start -- development",
     "compile:sass": "node-sass src/sass/main.scss src/css/style.css",
     "package": "electron-forge package",
     "make": "electron-forge make"
