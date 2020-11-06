@@ -36,7 +36,7 @@
   <img src="./src/img/snapshot.png">
 </p>
 
-The Electron Serial Monitor is a learning experience for myself to dive deeper into "Web" development. It really serves two purposes: 
+The Electron Serial Monitor is a learning experience for myself to dive deeper into "Web" development. It really serves two purposes:
 * Provided a useful tool for development of Embedded Electronic projects.
 * Introduce myself into the Web development atmosphere (JS, HTML, CSS, etc), without having to build a boring personal portfolio site.
 
@@ -108,6 +108,7 @@ Your Name - [@smurphy_iii](https://www.instagram.com/smurphy_iii/) - stephendpmu
 Project Link: [Electron Serial Monitor](https://github.com/stephendpmurphy/serial-monitor)
 
 ## Acknowledgements
+* [Node SerialPort](https://serialport.io/)
 * [Feather Icons](https://feathericons.com/)
 * [Nord Theme](https://www.nordtheme.com/)
 

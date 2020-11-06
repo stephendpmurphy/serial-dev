@@ -5,16 +5,11 @@
         font-size: 1.6rem;
         display:inline-block;
         cursor:pointer;
-        border-radius: 3px;
+        outline: none;
         color:$color-white;
         text-decoration:none;
         text-shadow:0px -1px 0px $color-primary-light;
         box-shadow: 0 1rem 1.5rem rgba($color-black, .4);
-
-        margin-right: .5rem;
-        margin-top: .5rem;
-        margin-bottom: .5rem;
-        padding: .3rem .5rem;
 
         transition: all .1s;
     }
@@ -28,7 +23,22 @@
         transform: translateY(-1px);
     }
 
-    &--image {
+    &--wText {
+        border-radius: 5px;
+        border: none;
+        padding: .5rem 1rem;
+        margin-right: .5rem;
+    }
+
+    &--wImg {
+        border-radius: 3px;
+        margin-right: .5rem;
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+        padding: .3rem .5rem;
+    }
+
+    &--figure {
         transform: translateY(3px);
     }
 
