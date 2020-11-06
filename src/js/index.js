@@ -304,10 +304,12 @@ var UIController = (function() {
         // Show a dialog message in the bottom of the screen
         showInfoMsg: function(type, header, msg) {
             if( type === "error" ) {
-                document.getElementById(DOMstrings.infoBox).style.backgroundColor = "#BF616A";
+                document.getElementById(DOMstrings.infoTxt).style.backgroundColor = "#BF616A";
+                document.getElementById(DOMstrings.infoHead).style.backgroundColor = "#bf505a";
             }
             else if( type === "info" ) {
-                document.getElementById(DOMstrings.infoBox).style.backgroundColor = "#A3BE8C";
+                document.getElementById(DOMstrings.infoTxt).style.backgroundColor = "#4C566A";
+                document.getElementById(DOMstrings.infoHead).style.backgroundColor = "#434C5E";
             }
             else {
                 return;

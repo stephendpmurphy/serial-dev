@@ -4,27 +4,25 @@
         bottom: 9rem;
         position: absolute;
         width: 25rem;
-        height: 9rem;
         background-color: $color-primary-dark;
-        border: 1px solid $color-primary-light;
         box-shadow: 0 1rem 2rem rgba($color-black, .5);
         transition: all .2s;
-        opacity: 1;
+        opacity: 0;
         border-radius: 2px;
     }
 
     &--head {
         padding-left: 1.5rem;
-        padding-top: 1.5rem;
-        padding-bottom: 0.5rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
         font-size: 1.6rem;
         font-weight: 500;
-        border-bottom: 1px solid $color-white;
     }
 
     &--txt {
         padding-top: 1rem;
         padding-left: 1.5rem;
         font-size: 1.2rem;
+        height: 5rem;
     }
 }
