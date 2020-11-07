@@ -14,27 +14,39 @@
             </div>
 
             <div class="settings" id="settingsWin">
-                <div class="settings--win">
-                    <h1 class="settings--win-header">Comms.</h1>
-                    <div class="settings--win-set">
-                        <div class="comboBox">
-                            <p>Path</p>
-                            <select id="cboPortList" class="comboBox--list" name="port">
+                <div class="settings--panel">
+                    <div class="settings--panel-sec">
+                        <h1 class="settings--panel-sec-header">Port Settings</h1>
+                        <div class="settings--panel-sec-cbo">
+                            <p>Serial Port Path</p>
+                            <select id="cboPortList" class="comboBox" name="port">
                             </select>
                         </div>
-
-                        <div class="comboBox">
-                            <p>Baud</p>
-                            <select id="cboBaudList" class="comboBox--list" name="baud-rate">
+                        <div class="settings--panel-sec-cbo">
+                            <p>Baud Rate (bps)</p>
+                            <select id="cboBaudList" class="comboBox" name="baud-rate">
                             </select>
                         </div>
-                    </div>
-                    <div class="settings--win-ctrl">
                         <button class="btn btn--wText btn--blue" id="btnConnect">connect</button>
                     </div>
-                    <h1 class="settings--win-header">Terminal</h1>
-                    <button class="btn btn--wText btn--blue" id="btnMonitorClear">clear</button>
-                    <button class="btn btn--wText btn--red" id="btnSettingsClose">close</button>
+
+                    <div class="settings--panel-sec">
+                        <h1 class="settings--panel-sec-header">Terminal</h1>
+                        <div class="settings--panel-sec-chk">
+                            <input type="checkbox" id="chkAutoScroll"class="checkBox">
+                            <p class="checkBox--label">Auto-scroll on new data</p>
+                        </div>
+                        <div class="settings--panel-sec-chk">
+                            <input type="checkbox" id="chkLocalEcho" class="checkBox">
+                            <p class="checkBox--label">Enable local echo</p>
+                        </div>
+                    </div>
+                    <div class="settings--panel-sec">
+                        <div class="settings--panel-sec-ctrl">
+                            <button class="btn btn--wText btn--blue" id="btnMonitorClear">clear</button>
+                            <button class="btn btn--wText btn--red" id="btnSettingsClose">close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

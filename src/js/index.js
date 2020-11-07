@@ -120,8 +120,6 @@ var dataController = (function() {
             serialPort.settings.path = path;
             serialPort.settings.baud = baud;
 
-            this.portDisconnect();
-
             console.log(`Connecting to ${serialPort.settings.path} @ ${serialPort.settings.baud} baud`);
 
             serialPort.isConfigured = instantiatePort(serialPort.settings.path, serialPort.settings.baud);
@@ -216,7 +214,9 @@ var UIController = (function() {
         btnConnect: "btnConnect",
         settingsWin: "settingsWin",
         cboPortList: "cboPortList",
-        cboBaudList: "cboBaudList"
+        cboBaudList: "cboBaudList",
+        chkLocalEcho: "chkLocalEcho",
+        chkAutoScroll: "chkAutoScroll"
     }
 
     // Open a save file dialog to save the serial data output screen
@@ -253,6 +253,16 @@ var UIController = (function() {
         }
 
         return list;
+    }
+
+    var isAutoScrollChecked = function () {
+        var chk = document.getElementById(DOMstrings.chkAutoScroll);
+        if( chk.checked ) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     // UI Controller API
@@ -294,8 +304,12 @@ var UIController = (function() {
         appendSerialData: function(data) {
             document.getElementById(DOMstrings.txtOutput).textContent += `${data}\n`;
 
-            var elem = document.getElementById(DOMstrings.txtOutput);
-            elem.scrollTop = elem.scrollHeight;
+            // If auto-scroll is checked. Move the view port down to the bottom
+            // of the text output
+            if( isAutoScrollChecked() ) {
+                var elem = document.getElementById(DOMstrings.txtOutput);
+                elem.scrollTop = elem.scrollHeight;
+            }
         },
         // Clear the serial data window
         clearSerialData: function() {
@@ -308,8 +322,8 @@ var UIController = (function() {
                 document.getElementById(DOMstrings.infoHead).style.backgroundColor = "#bf505a";
             }
             else if( type === "info" ) {
-                document.getElementById(DOMstrings.infoTxt).style.backgroundColor = "#4C566A";
-                document.getElementById(DOMstrings.infoHead).style.backgroundColor = "#434C5E";
+                document.getElementById(DOMstrings.infoTxt).style.backgroundColor = "#81A1C1";
+                document.getElementById(DOMstrings.infoHead).style.backgroundColor = "#5E81AC";
             }
             else {
                 return;
@@ -324,7 +338,7 @@ var UIController = (function() {
             setTimeout(() => {
                 document.getElementById(DOMstrings.infoBox).style.opacity = 0;
                 document.getElementById(DOMstrings.infoBox).style.transform = ""
-            }, 4000);
+            }, 5000);
         },
         // Focus input on the text input field
         focusOnInput: function() {
@@ -397,6 +411,15 @@ var UIController = (function() {
         // Clear the current text input value
         clearTxtInput: function() {
             document.getElementById(DOMstrings.txtInput).value = "";
+        },
+        isLocalEchoChecked: function () {
+            var chk = document.getElementById(DOMstrings.chkLocalEcho);
+            if( chk.checked ) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 })();
@@ -436,6 +459,13 @@ var controller = (function(dataCtrl, UICtrl) {
     var sendInputData = function() {
         var input = UICtrl.getTxtInput();
         dataCtrl.sendData(input);
+
+        // If local echo is enabled. Send the input data
+        // to the local serial monitor
+        if( UICtrl.isLocalEchoChecked() ) {
+            UICtrl.appendSerialData(input);
+        }
+
         UICtrl.clearTxtInput();
     }
 
@@ -478,8 +508,6 @@ var controller = (function(dataCtrl, UICtrl) {
         })
 
         document.getElementById(DOM.btnConnect).addEventListener("click", () => {
-            UICtrl.closeSettingsWindow();
-
             if( document.getElementById(DOM.btnConnect).innerText == "connect" ) {
 
                 applySettings();
@@ -490,6 +518,7 @@ var controller = (function(dataCtrl, UICtrl) {
                     UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
                     UICtrl.setStatus(`Connected to ${path} @ ${baud} baud`);
                     document.getElementById(DOM.btnConnect).innerText = "disconnect";
+                    document.getElementById(DOM.btnConnect).style.backgroundColor = "#BF616A";
                     return;
                 }
             }
@@ -499,6 +528,7 @@ var controller = (function(dataCtrl, UICtrl) {
                     UICtrl.showInfoMsg("error", "Disconnected.", "Serial port disconnected.");
                     UICtrl.setStatus('Disconnected');
                     document.getElementById(DOM.btnConnect).innerText = "connect";
+                    document.getElementById(DOM.btnConnect).style.backgroundColor = "";
                     return;
                 }
             }

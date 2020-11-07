@@ -16,35 +16,51 @@
         transition: all .25s
     }
 
-    &--win {
-        text-align: center;
+    &--panel {
         position: absolute;
         left: 50%;
         bottom: 50%;
         transform: translate(-50%, 50%);
-        width: 40rem;
-        height: 35rem;
         background-color: $color-primary-dark;
-        border: 1px solid $color-primary-light;
         box-shadow: 0 1rem 2rem rgba($color-black, .5);
-        border-radius: 2px;
-        padding: 5rem;
+        padding: 4rem 2.5rem;
+        width: 40rem;
 
-        &-header {
-            text-align: left;
-            border-bottom: 2px solid $color-white;
-            margin-bottom: 2rem;
-        }
+        &-sec {
+            & {
+                display: flex;
+                flex-direction: column;
+            }
 
-        &-set {
-            font-size: 1.6rem;
-            margin-bottom: 2rem;
-            display: flex;
-            flex-direction: column;
-        }
+            &:not(:last-child) {
+                margin-bottom: 3.5rem;
+            }
 
-        &-ctrl {
-            margin-bottom: 2rem;
+            &-header {
+                text-align: left;
+                border-bottom: 2px solid $color-white;
+                margin-bottom: 2rem;
+            }
+
+            &-cbo {
+                font-size: 1.3rem;
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 1rem;
+            }
+
+            &-chk {
+                font-size: 1.3rem;
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 1rem;
+            }
+
+            &-ctrl {
+                display: flex;
+                flex-direction: row;
+            }
         }
     }
 }
