@@ -14,7 +14,13 @@
             </div>
 
             <div class="settings" id="settingsWin">
-                <div class="settings--panel">
+                <div class="settings--panel" id="settingsPanel">
+                    <div class="settings--panel-exit">
+                        <div id="btnSettingsClose" class="btn btn--wImg btn--exit">
+                            <img class="btn--figure" src="img/x.svg">
+                        </div>
+                    </div>
+
                     <div class="settings--panel-sec">
                         <h1 class="settings--panel-sec-header">Port Settings</h1>
                         <div class="settings--panel-sec-cbo">
@@ -40,11 +46,8 @@
                             <input type="checkbox" id="chkLocalEcho" class="checkBox">
                             <p class="checkBox--label">Enable local echo</p>
                         </div>
-                    </div>
-                    <div class="settings--panel-sec">
                         <div class="settings--panel-sec-ctrl">
                             <button class="btn btn--wText btn--blue" id="btnMonitorClear">clear</button>
-                            <button class="btn btn--wText btn--red" id="btnSettingsClose">close</button>
                         </div>
                     </div>
                 </div>

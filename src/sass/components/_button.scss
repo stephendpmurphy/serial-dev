@@ -22,6 +22,10 @@
         transform: translateY(-1px);
     }
 
+    &--exit {
+        box-shadow: none;
+    }
+
     &--wText {
         border: none;
         padding: .5rem 1rem;

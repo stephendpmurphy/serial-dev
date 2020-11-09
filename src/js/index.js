@@ -507,6 +507,10 @@ var controller = (function(dataCtrl, UICtrl) {
             UICtrl.closeSettingsWindow();
         })
 
+        document.getElementById(DOM.settingsWin).addEventListener('click', () => {
+            UICtrl.closeSettingsWindow();
+        })
+
         document.getElementById(DOM.btnConnect).addEventListener("click", () => {
             if( document.getElementById(DOM.btnConnect).innerText == "connect" ) {
 
