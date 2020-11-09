@@ -41,7 +41,7 @@ var dataController = (function() {
         // data will begin to come through
         serialPort.port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
             if(err) {
-                console.log("Error: ", err);
+                serialPort.CB_error(err);
                 return false;
             }
             else {
@@ -65,13 +65,11 @@ var dataController = (function() {
         // When the port is open, emit a console message
         serialPort.port.on('open', () => {
             serialPort.CB_portConnected();
-            console.log("Port opened.");
         })
 
         // When the port is closed, emit a console message
         serialPort.port.on('close', () => {
             serialPort.CB_portDisconnected();
-            console.log("Port closed.");
         })
 
         return true;
@@ -87,7 +85,7 @@ var dataController = (function() {
             try {
                 SerialPort.list().then((ports, err) => {
                     if (err) {
-                        console.log("Error: ", err.message);
+                        serialPort.CB_error(err);
                     }
 
                     if (ports.length !== 0) {
@@ -104,7 +102,7 @@ var dataController = (function() {
                 })
             }
             catch(err) {
-                console.log("Failed to retrieve a port list: ", err);
+                serialPort.CB_error(err.message);
             }
 
             return portList;
@@ -125,8 +123,6 @@ var dataController = (function() {
             serialPort.settings.path = path;
             serialPort.settings.baud = baud;
 
-            console.log(`Connecting to ${serialPort.settings.path} @ ${serialPort.settings.baud} baud`);
-
             serialPort.isConfigured = instantiatePort(serialPort.settings.path, serialPort.settings.baud);
 
             return serialPort.isConfigured;
@@ -134,7 +130,6 @@ var dataController = (function() {
         // Connect to the port, checking if it has been properly configured, and the serial port object
         // is not undefined or null
         portConnect: function() {
-            console.log("Opening port");
             try {
                 if( ((serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null)) || instantiatePort(portSettings.path, portSettings.baud)) {
                     serialPort.port.open( (err) => {
@@ -143,21 +138,20 @@ var dataController = (function() {
                 }
             }
             catch(err) {
-                console.log("There was a problem opening the port: ", err);
+                serialPort.CB_error(err.message);
                 return false;
             }
         },
         // Disconnect the port, checking if it has been properly configured, and the serial port object
         // is not undefined or null
         portDisconnect: function() {
-            console.log("Closing port");
             try {
                 if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
                     serialPort.port.close();
                 }
             }
             catch(err) {
-                console.log("There was a problem closing the port: ", err);
+                serialPort.CB_error(err.message);
                 return false;
             }
         },
@@ -183,7 +177,6 @@ var dataController = (function() {
         sendData: function(outgoing) {
             try {
                 if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
-                    console.log("Sending: ", outgoing);
                     outgoing = outgoing + "\n\r";
                     serialPort.port.write(outgoing);
                     return true;
@@ -194,7 +187,7 @@ var dataController = (function() {
                 }
             }
             catch(err) {
-                console.log("There was a problem closing the port: ", err);
+                serialPort.CB_error(err.message);
                 return false;
             }
         }
@@ -343,7 +336,7 @@ var UIController = (function() {
             setTimeout(() => {
                 document.getElementById(DOMstrings.infoBox).style.opacity = 0;
                 document.getElementById(DOMstrings.infoBox).style.transform = ""
-            }, 5000);
+            }, 7500);
         },
         // Focus input on the text input field
         focusOnInput: function() {
@@ -458,7 +451,7 @@ var controller = (function(dataCtrl, UICtrl) {
     }
 
     var CB_errorOccured = function (err) {
-        UICtrl.showInfoMsg("error", "Port unavailable.", "Serial port is either busy or unavailable.");
+        UICtrl.showInfoMsg("error", "Serial Port error", err);
         console.log(err);
     }
 
