@@ -86,6 +86,7 @@ var dataController = (function() {
                 SerialPort.list().then((ports, err) => {
                     if (err) {
                         serialPort.CB_error(err);
+                        return [];
                     }
 
                     if (ports.length !== 0) {
@@ -133,7 +134,9 @@ var dataController = (function() {
             try {
                 if( ((serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null)) || instantiatePort(portSettings.path, portSettings.baud)) {
                     serialPort.port.open( (err) => {
-                        serialPort.CB_error(err);
+                        if( err ) {
+                            serialPort.CB_error(err);
+                        }
                     });
                 }
             }
@@ -286,7 +289,6 @@ var UIController = (function() {
             }
 
             var filePath = openSaveFileDialog();
-            console.log("Saving file at: ", filePath);
             if( filePath !== undefined ) {
                 fs.writeFile(filePath, dataOutput, (err) => {
                     if(err) {
@@ -352,7 +354,6 @@ var UIController = (function() {
             // Remove old ports
             for( var i=0; i < cboPorts.options.length; i++ ) {
                 if( !foundInList(cboPorts.options[i].text, ports) ) {
-                    console.log("Removing: ", cboPorts.options[i].text);
                     // The option was not found in the port list.. Remove it
                     cboPorts.remove(i);
                 }
@@ -363,7 +364,6 @@ var UIController = (function() {
             // Add new ports
             ports.forEach( (port) => {
                 if( !foundInList(port, cboOptionsList) ) {
-                    console.log("Adding: ", port);
                     var option = document.createElement("option");
                     option.text = port;
                     cboPorts.add(option);
@@ -435,6 +435,7 @@ var controller = (function(dataCtrl, UICtrl) {
     }
 
     var CB_portConnected = function() {
+        var DOM = UICtrl.getDOMstrings();
         var path = UICtrl.getSelectedPath();
         var baud = UICtrl.getSelectedBaud();
         UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
@@ -444,6 +445,7 @@ var controller = (function(dataCtrl, UICtrl) {
     }
 
     var CB_portDisconnected = function() {
+        var DOM = UICtrl.getDOMstrings();
         UICtrl.showInfoMsg("error", "Disconnected.", "Serial port disconnected.");
         UICtrl.setStatus('Disconnected');
         document.getElementById(DOM.btnConnect).innerText = "connect";
@@ -452,7 +454,6 @@ var controller = (function(dataCtrl, UICtrl) {
 
     var CB_errorOccured = function (err) {
         UICtrl.showInfoMsg("error", "Serial Port error", err);
-        console.log(err);
     }
 
     // Timer used to retrieve a port list, and then display it using the
