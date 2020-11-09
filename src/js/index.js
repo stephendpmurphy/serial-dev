@@ -12,7 +12,10 @@ var dataController = (function() {
             baud: null
         },
         isConfigured: false,
-        CB_dataRcvd: null
+        CB_dataRcvd: null,
+        CB_portConnected: null,
+        CB_portDisconnected: null,
+        CB_error: null
     }
 
     // Remove ANSI codes from the provided ASCII string
@@ -61,11 +64,13 @@ var dataController = (function() {
 
         // When the port is open, emit a console message
         serialPort.port.on('open', () => {
+            serialPort.CB_portConnected();
             console.log("Port opened.");
         })
 
         // When the port is closed, emit a console message
         serialPort.port.on('close', () => {
+            serialPort.CB_portDisconnected();
             console.log("Port closed.");
         })
 
@@ -131,16 +136,10 @@ var dataController = (function() {
         portConnect: function() {
             console.log("Opening port");
             try {
-                if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
-                    serialPort.port.open();
-                    return true;
-                }
-                else if( instantiatePort(portSettings.path, portSettings.baud) ) {
-                    serialPort.port.open();
-                    return true;
-                }
-                else {
-                    return false;
+                if( ((serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null)) || instantiatePort(portSettings.path, portSettings.baud)) {
+                    serialPort.port.open( (err) => {
+                        serialPort.CB_error(err);
+                    });
                 }
             }
             catch(err) {
@@ -155,11 +154,6 @@ var dataController = (function() {
             try {
                 if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
                     serialPort.port.close();
-                    return true;
-                }
-                else
-                {
-                    return false;
                 }
             }
             catch(err) {
@@ -168,10 +162,21 @@ var dataController = (function() {
             }
         },
         // Setup a callback to be executed any time new data is received over the serial port.
-        setupDataCB: function(cb) {
+        setupCallbacks: function(cb, connect, disconnect, error) {
             if( cb !== null ) {
-                console.log("Data Rcvd CB setup.");
                 serialPort.CB_dataRcvd = cb;
+            }
+
+            if( connect !== null ) {
+                serialPort.CB_portConnected = connect;
+            }
+
+            if( disconnect !== null ) {
+                serialPort.CB_portDisconnected = disconnect;
+            }
+
+            if( error !== null ) {
+                serialPort.CB_error = error;
             }
         },
         // If our serial port connection is configured, send data out with an appended \n\r
@@ -436,6 +441,27 @@ var controller = (function(dataCtrl, UICtrl) {
         UICtrl.appendSerialData(incoming);
     }
 
+    var CB_portConnected = function() {
+        var path = UICtrl.getSelectedPath();
+        var baud = UICtrl.getSelectedBaud();
+        UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
+        UICtrl.setStatus(`Connected to ${path} @ ${baud} baud`);
+        document.getElementById(DOM.btnConnect).innerText = "disconnect";
+        document.getElementById(DOM.btnConnect).style.backgroundColor = "#BF616A";
+    }
+
+    var CB_portDisconnected = function() {
+        UICtrl.showInfoMsg("error", "Disconnected.", "Serial port disconnected.");
+        UICtrl.setStatus('Disconnected');
+        document.getElementById(DOM.btnConnect).innerText = "connect";
+        document.getElementById(DOM.btnConnect).style.backgroundColor = "";
+    }
+
+    var CB_errorOccured = function (err) {
+        UICtrl.showInfoMsg("error", "Port unavailable.", "Serial port is either busy or unavailable.");
+        console.log(err);
+    }
+
     // Timer used to retrieve a port list, and then display it using the
     // UI controller API. We then reschedule this function to be fired again.
     var timer_updatePorts = function() {
@@ -511,30 +537,11 @@ var controller = (function(dataCtrl, UICtrl) {
             if( document.getElementById(DOM.btnConnect).innerText == "connect" ) {
 
                 applySettings();
-
-                if( dataCtrl.portConnect() ) {
-                    var path = UICtrl.getSelectedPath();
-                    var baud = UICtrl.getSelectedBaud();
-                    UICtrl.showInfoMsg("info", "Connected.", `Connected to ${path} @ ${baud} baud`);
-                    UICtrl.setStatus(`Connected to ${path} @ ${baud} baud`);
-                    document.getElementById(DOM.btnConnect).innerText = "disconnect";
-                    document.getElementById(DOM.btnConnect).style.backgroundColor = "#BF616A";
-                    return;
-                }
+                dataCtrl.portConnect();
             }
             else {
-                document.getElementById(DOM.btnConnect).innerText = "connect";
-                if( dataCtrl.portDisconnect() ) {
-                    UICtrl.showInfoMsg("error", "Disconnected.", "Serial port disconnected.");
-                    UICtrl.setStatus('Disconnected');
-                    document.getElementById(DOM.btnConnect).innerText = "connect";
-                    document.getElementById(DOM.btnConnect).style.backgroundColor = "";
-                    return;
-                }
+                dataCtrl.portDisconnect();
             }
-
-            UICtrl.showInfoMsg("error", "Could not connect.", "Failed to connect to the requested serial port.");
-            UICtrl.setStatus('Disconnected');
         })
 
         document.getElementById(DOM.btnMonitorClear).addEventListener("click", () => {
@@ -556,7 +563,7 @@ var controller = (function(dataCtrl, UICtrl) {
             init_keyboard_input();
 
             // Setup the callback for new data
-            dataCtrl.setupDataCB( CB_dataRcvd );
+            dataCtrl.setupCallbacks( CB_dataRcvd, CB_portConnected, CB_portDisconnected, CB_errorOccured);
 
             // Init the baudrate combo box with our available
             // baud rates.
