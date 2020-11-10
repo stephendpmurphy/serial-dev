@@ -4,7 +4,11 @@ name: Electron Forge Release
 
 jobs:
   build:
-    runs-on: ubunut-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
