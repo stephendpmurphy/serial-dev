@@ -28,6 +28,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "@electron-forge/publisher-github": "^6.0.0-beta.54",
     "electron": "^10.1.4",
     "electron-rebuild": "^2.3.1",
     "node-sass": "^4.14.1"
@@ -43,54 +44,54 @@
       "packagerConfig": {},
       "makers": [
         {
-            "name": "@electron-forge/maker-squirrel",
-            "config": {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
             "name": "serial_monitor"
-            }
+          }
         },
         {
-            "name": "@electron-forge/maker-zip",
-            "platforms": [
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
             "darwin",
             "linux"
-            ]
+          ]
         },
         {
-            "name": "@electron-forge/maker-deb",
-            "config": {
+          "name": "@electron-forge/maker-deb",
+          "config": {
             "options": {
-                "categories": [
+              "categories": [
                 "Development"
-                ],
-                "description": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS",
-                "genericName": "Serial Monitor",
-                "homepage": "https://github.com/stephendpmurphy/serial-monitor",
-                "icon": "./src/assets/img/zap.png",
-                "maintainer": "Stephen Murphy",
-                "name": "electron-serial-monitor",
-                "productDescription": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS.",
-                "productName": "Electron Serial Monitor",
-                "section": "devel",
-                "size": 64
+              ],
+              "description": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS",
+              "genericName": "Serial Monitor",
+              "homepage": "https://github.com/stephendpmurphy/serial-monitor",
+              "icon": "./src/assets/img/zap.png",
+              "maintainer": "Stephen Murphy",
+              "name": "electron-serial-monitor",
+              "productDescription": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS.",
+              "productName": "Electron Serial Monitor",
+              "section": "devel",
+              "size": 64
             }
-            }
+          }
         },
         {
-            "name": "@electron-forge/maker-rpm",
-            "config": {}
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
         }
       ],
       "publishers": [
         {
-            "name": "@electron-forge/publisher-github",
-            "config": {
-                "draft": true,
-                "prerelease": true,
-                "repository": {
-                    "owner": "stephendpmurphy",
-                    "name": "serial-monitor"
-                }
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "draft": true,
+            "prerelease": true,
+            "repository": {
+              "owner": "stephendpmurphy",
+              "name": "serial-monitor"
             }
+          }
         }
       ]
     }
