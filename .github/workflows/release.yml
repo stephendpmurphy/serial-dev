@@ -14,8 +14,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        include:
+        - os: ubuntu-latest
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
