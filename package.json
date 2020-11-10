@@ -9,7 +9,7 @@
     "compile:sass": "node-sass src/sass/main.scss src/css/style.css",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "pubish": "electron-forge publish"
+    "publish": "electron-forge publish"
   },
   "repository": {
     "type": "git",
