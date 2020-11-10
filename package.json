@@ -85,8 +85,8 @@
         {
           "name": "@electron-forge/publisher-github",
           "config": {
-            "draft": true,
-            "prerelease": true,
+            "draft": false,
+            "prerelease": false,
             "repository": {
               "owner": "stephendpmurphy",
               "name": "serial-monitor"
