@@ -33,7 +33,7 @@
 ## About the Project
 
 <p align="center">
-  <img src="./src/img/snapshot.png">
+  <img src="./src/assets/img/snapshot.png">
 </p>
 
 The Electron Serial Monitor is a learning experience for myself to dive deeper into "Web" development. It really serves two purposes:
