@@ -5,14 +5,13 @@ name: Electron Forge Release
 on:
   push:
     branches: [ main ]
-
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    runs-on: [ubuntu-latest]
 
+    runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
