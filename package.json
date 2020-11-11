@@ -1,6 +1,6 @@
 {
   "name": "serial-monitor",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS",
   "main": "src/js/main.js",
   "scripts": {
@@ -86,7 +86,7 @@
           "name": "@electron-forge/publisher-github",
           "config": {
             "draft": true,
-            "prerelease": true,
+            "prerelease": false,
             "repository": {
               "owner": "stephendpmurphy",
               "name": "serial-monitor"
