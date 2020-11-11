@@ -1,6 +1,6 @@
 {
   "name": "serial-monitor",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS",
   "main": "src/js/main.js",
   "scripts": {
