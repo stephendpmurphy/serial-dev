@@ -8,9 +8,9 @@
 <br />
 
 <p align="center">
-  <h3 align="center">Electron Serial Monitor</h3>
+  <h3 align="center">Serial Dev</h3>
   <p align="center">
-    Cross Platform Serial Monitor written using Electron and NodeJS
+    Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS
   </p>
 </p>
 
@@ -36,10 +36,7 @@
   <img src="./src/assets/img/snapshot.png">
 </p>
 
-The Electron Serial Monitor is a learning experience for myself to dive deeper into "Web" development. It really serves two purposes:
-* Provided a useful tool for development of Embedded Electronic projects.
-* Introduce myself into the Web development atmosphere (JS, HTML, CSS, etc), without having to build a boring personal portfolio site.
-
+Serial Dev is an open source serial port monitor built on ElectronJS and aims to provide an intuitive and uniform experience for monitoring and sending serial data on all of the users platforms.
 The project is open source with the hope that others can get use, improve, and learn from it. Contributions are absolutely welcome and if you are interested in doing so, please visit the [Contributing](#contributing) section.
 
 ### Built With
@@ -55,7 +52,7 @@ To get a local copy of the source up and running follow these simple steps
 ### Retrieving the Source
 
 ```sh
-$ git clone https://github.com/stephendpmurphy/serial-monitor.git
+$ git clone https://github.com/stephendpmurphy/serial-dev.git
 ```
 
 ### Installation
@@ -103,24 +100,24 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - [@smurphy_iii](https://www.instagram.com/smurphy_iii/) - stephendpmurphy@msn.com
+Stephen Murphy - [@smurphy_iii](https://www.instagram.com/smurphy_iii/) - stephendpmurphy@msn.com
 
-Project Link: [Electron Serial Monitor](https://github.com/stephendpmurphy/serial-monitor)
+Project Link: [Serial Dev](https://github.com/stephendpmurphy/serial-dev)
 
 ## Acknowledgements
 * [Node SerialPort](https://serialport.io/)
 * [Feather Icons](https://feathericons.com/)
 * [Nord Theme](https://www.nordtheme.com/)
 
-[contributors-shield]: https://img.shields.io/github/contributors/stephendpmurphy/serial-monitor.svg?style=flat-square
-[contributors-url]: https://github.com/stephendpmurphy/serial-monitor/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/stephendpmurphy/serial-monitor.svg?style=flat-square
-[forks-url]: https://github.com/stephendpmurphy/serial-monitor/network/members
-[stars-shield]: https://img.shields.io/github/stars/stephendpmurphy/serial-monitor.svg?style=flat-square
-[stars-url]: https://github.com/stephendpmurphy/serial-monitor/stargazers
-[issues-shield]: https://img.shields.io/github/issues/stephendpmurphy/serial-monitor.svg?style=flat-square
-[issues-url]: https://github.com/stephendpmurphy/serial-monitor/issues
-[license-shield]: https://img.shields.io/github/license/stephendpmurphy/serial-monitor.svg?style=flat-square
-[license-url]: https://github.com/stephendpmurphy/serial-monitor/blob/main/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/stephendpmurphy/serial-dev.svg?style=flat-square
+[contributors-url]: https://github.com/stephendpmurphy/serial-dev/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/stephendpmurphy/serial-dev.svg?style=flat-square
+[forks-url]: https://github.com/stephendpmurphy/serial-dev/network/members
+[stars-shield]: https://img.shields.io/github/stars/stephendpmurphy/serial-dev.svg?style=flat-square
+[stars-url]: https://github.com/stephendpmurphy/serial-dev/stargazers
+[issues-shield]: https://img.shields.io/github/issues/stephendpmurphy/serial-dev.svg?style=flat-square
+[issues-url]: https://github.com/stephendpmurphy/serial-dev/issues
+[license-shield]: https://img.shields.io/github/license/stephendpmurphy/serial-dev.svg?style=flat-square
+[license-url]: https://github.com/stephendpmurphy/serial-dev/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/smurphy129/
