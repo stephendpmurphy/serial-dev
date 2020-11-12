@@ -1,7 +1,7 @@
 {
-  "name": "serial-monitor",
+  "name": "serial-dev",
   "version": "1.2.0",
-  "description": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS",
+  "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
   "main": "src/js/main.js",
   "scripts": {
     "install": "electron-rebuild",
@@ -13,15 +13,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stephendpmurphy/serial-monitor.git"
+    "url": "git+https://github.com/stephendpmurphy/serial-dev.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stephendpmurphy/serial-monitor/issues"
+    "url": "https://github.com/stephendpmurphy/serial-dev/issues"
   },
-  "homepage": "https://github.com/stephendpmurphy/serial-monitor#readme",
+  "homepage": "https://github.com/stephendpmurphy/serial-dev#readme",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
     "@electron-forge/maker-deb": "^6.0.0-beta.54",
@@ -47,7 +47,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "serial_monitor"
+            "name": "serial-dev"
           }
         },
         {
@@ -65,13 +65,13 @@
                 "Development"
               ],
               "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
-              "genericName": "Serial Monitor",
-              "homepage": "https://github.com/stephendpmurphy/serial-monitor",
+              "genericName": "Serial Dev",
+              "homepage": "https://github.com/stephendpmurphy/serial-dev",
               "icon": "./src/assets/img/zap.png",
               "maintainer": "Stephen Murphy",
-              "name": "electron-serial-monitor",
-              "productDescription": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS.",
-              "productName": "Electron Serial Monitor",
+              "name": "serial-dev",
+              "productDescription": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS.",
+              "productName": "Serial Dev",
               "section": "devel",
               "size": 64
             }
@@ -86,14 +86,14 @@
                     ],
                     "compressionLevel": 1,
                     "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
-                    "genericName": "Serial Monitor",
+                    "genericName": "Serial Dev",
                     "group": "Development/Tools",
-                    "homepage": "https://github.com/stephendpmurphy/serial-monitor",
+                    "homepage": "https://github.com/stephendpmurphy/serial-dev",
                     "icon": "./src/assets/img/zap.png",
                     "license": "MIT",
-                    "name": "electron-serial-monitor",
-                    "productDescription": "Open Source Cross Platform Serial Monitor written using Electron and NodeJS.",
-                    "productName": "Electron Serial Monitor"
+                    "name": "electron-serial-dev",
+                    "productDescription": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS.",
+                    "productName": "Serial Dev"
                 }
             }
         }
@@ -106,7 +106,7 @@
             "prerelease": false,
             "repository": {
               "owner": "stephendpmurphy",
-              "name": "serial-monitor"
+              "name": "serial-dev"
             }
           }
         }
