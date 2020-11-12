@@ -47,7 +47,11 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "serial-dev"
+            "authors": "Stephen Murphy",
+            "name": "serial-dev",
+            "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
+            "noMsi": false,
+            "setupExe": "ElectronSerialMonitorInstaller.exe"
           }
         },
         {
