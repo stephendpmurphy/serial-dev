@@ -4,6 +4,9 @@ const path = require('path');
 // Check if we are in development mode
 let development = process.argv[2] === "development";
 
+// Handle windows squirrel events
+if (require('electron-squirrel-startup')) return;
+
 function createWindow () {
   const win = new BrowserWindow({
     backgroundColor: '#2E3440',

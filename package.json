@@ -1,5 +1,5 @@
 {
-  "name": "serial-dev",
+  "name": "serial_dev",
   "version": "1.2.0",
   "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
   "main": "src/js/main.js",
@@ -26,7 +26,6 @@
     "@electron-forge/cli": "^6.0.0-beta.54",
     "@electron-forge/maker-deb": "^6.0.0-beta.54",
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
-    "@electron-forge/maker-snap": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@electron-forge/publisher-github": "^6.0.0-beta.54",
@@ -48,17 +47,20 @@
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "authors": "Stephen Murphy",
-            "name": "serial-dev",
             "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
+            "exe": "serial_dev.exe",
+            "name": "serial_dev",
             "noMsi": false,
-            "setupExe": "ElectronSerialMonitorInstaller.exe"
+            "setupExe": "serial_dev_setup.exe",
+            "title": "Serial Dev"
           }
         },
         {
           "name": "@electron-forge/maker-zip",
           "platforms": [
             "darwin",
-            "linux"
+            "linux",
+            "win32"
           ]
         },
         {
@@ -73,7 +75,7 @@
               "homepage": "https://github.com/stephendpmurphy/serial-dev",
               "icon": "./src/assets/img/zap.png",
               "maintainer": "Stephen Murphy",
-              "name": "serial-dev",
+              "name": "serial_dev",
               "productDescription": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS.",
               "productName": "Serial Dev",
               "section": "devel",
@@ -82,24 +84,24 @@
           }
         },
         {
-            "name": "@electron-forge/maker-rpm",
-            "config": {
-                "options": {
-                    "categories": [
-                        "Development"
-                    ],
-                    "compressionLevel": 1,
-                    "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
-                    "genericName": "Serial Dev",
-                    "group": "Development/Tools",
-                    "homepage": "https://github.com/stephendpmurphy/serial-dev",
-                    "icon": "./src/assets/img/zap.png",
-                    "license": "MIT",
-                    "name": "electron-serial-dev",
-                    "productDescription": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS.",
-                    "productName": "Serial Dev"
-                }
+          "name": "@electron-forge/maker-rpm",
+          "config": {
+            "options": {
+              "categories": [
+                "Development"
+              ],
+              "compressionLevel": 1,
+              "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
+              "genericName": "Serial Dev",
+              "group": "Development/Tools",
+              "homepage": "https://github.com/stephendpmurphy/serial-dev",
+              "icon": "./src/assets/img/zap.png",
+              "license": "MIT",
+              "name": "serial_dev",
+              "productDescription": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS.",
+              "productName": "Serial Dev"
             }
+          }
         }
       ],
       "publishers": [
@@ -110,7 +112,7 @@
             "prerelease": false,
             "repository": {
               "owner": "stephendpmurphy",
-              "name": "serial-dev"
+              "name": "serial_dev"
             }
           }
         }
