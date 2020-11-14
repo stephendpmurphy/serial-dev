@@ -207,6 +207,7 @@ var UIController = (function() {
         txtInput: "txtInput",
         txtOutput: "txtOutput",
         txtStatus: "txtStatus",
+        txtVersion: "txtVersion",
         btnSend: "btnSend",
         btnSave: "btnSave",
         btnSettingsOpen: "btnSettings",
@@ -422,6 +423,10 @@ var UIController = (function() {
             else {
                 return false;
             }
+        },
+        setVersion: function(ver) {
+            version = document.getElementById(DOMstrings.txtVersion);
+            version.innerText = `v${ver}`;
         }
     }
 })();
@@ -599,6 +604,10 @@ var controller = (function(dataCtrl, UICtrl) {
 
             // Setup the callback for new data
             dataCtrl.setupCallbacks( CB_dataRcvd, CB_portConnected, CB_portDisconnected, CB_errorOccured);
+
+            // Set the app version in the footer
+            const {version} = require("../../package.json");
+            UICtrl.setVersion(version);
 
             // Init the baudrate combo box with our available
             // baud rates.

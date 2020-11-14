@@ -46,6 +46,7 @@
 
             &:hover {
                 transform: translateY(-0.3rem);
+                box-shadow: 0 1rem 2rem rgba($color-black, .5);
             }
 
             &:active {
@@ -180,8 +181,13 @@
     }
 
     &--info {
+        transform: translateY(-2px);
         text-align: right;
         width: 50%;
+    }
+
+    &--version {
+        margin-left: 0.35rem;
     }
 }
 
