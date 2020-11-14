@@ -52,7 +52,8 @@
             "name": "serial_dev",
             "noMsi": false,
             "setupExe": "serial_dev_setup.exe",
-            "title": "Serial Dev"
+            "title": "Serial Dev",
+            "iconUrl": "https://electronassets.s3.us-east-2.amazonaws.com/thunder_32x32.ico"
           }
         },
         {

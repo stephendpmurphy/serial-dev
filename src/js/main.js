@@ -19,7 +19,7 @@ function createWindow () {
       nodeIntegration: true,
       enableRemoteModule: true
     },
-    icon: path.join(__dirname, "../assets/icons/thunder.png")
+    icon: path.join(__dirname, "../assets/icons/thunder_32x32.png")
   })
 
   win.webContents.on('new-window', (e, url) => {
