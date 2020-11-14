@@ -10,14 +10,14 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest, windows-latest]
 
     env:
-      GITHUB_TOKEN: ${{ secrets.CI_RELEASE }}
+      GITHUB_TOKEN: ${{ secrets.GITUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
