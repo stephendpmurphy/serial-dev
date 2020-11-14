@@ -8,7 +8,7 @@
 <br />
 
 <p align="center">
-  <h3 align="center">Serial Dev</h3>
+  <h3 align="center">⚡ Serial Dev</h3>
   <p align="center">
     Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS
   </p>
@@ -33,7 +33,7 @@
 ## About the Project
 
 <p align="center">
-  <img src="./src/assets/img/snapshot.png">
+  <img src="./src/assets/imgs/screenshot.png">
 </p>
 
 Serial Dev is an open source serial port monitor built on ElectronJS and aims to provide an intuitive and uniform experience for monitoring and sending serial data on all of the users platforms.
