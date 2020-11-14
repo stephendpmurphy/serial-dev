@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const update = require('update-electron-app');
 
 // Check if we are in development mode
 let development = process.argv[2] === "development";
@@ -33,6 +34,11 @@ function createWindow () {
   // if we are in development mode.. Then open the dev tools
   if( development )
     win.webContents.openDevTools({mode: 'undocked'});
+
+  // Wait an arbitrary amount of time for the app to start before checking
+  // for uodates. This is to reduce conflicts with the squirrel events
+  // that fire at app startup
+  setTimeout( update(), 5000);
 }
 
 app.allowRendererProcessReuse=false
