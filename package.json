@@ -1,6 +1,6 @@
 {
   "name": "serial_dev",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Open-Source Cross-Platform Serial Monitor written using Electron and NodeJS",
   "main": "src/js/main.js",
   "scripts": {
