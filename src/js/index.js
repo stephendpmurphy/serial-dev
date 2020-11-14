@@ -213,11 +213,15 @@ var UIController = (function() {
         btnSettingsClose: "btnSettingsClose",
         btnMonitorClear: "btnMonitorClear",
         btnConnect: "btnConnect",
+        btnWinClose: "btnWinClose",
+        btnWinMinimize: "btnWinMinimize",
+        btnWinMaximize: "btnWinMaximize",
         settingsWin: "settingsWin",
         cboPortList: "cboPortList",
         cboBaudList: "cboBaudList",
         chkLocalEcho: "chkLocalEcho",
-        chkAutoScroll: "chkAutoScroll"
+        chkAutoScroll: "chkAutoScroll",
+        maximizeFigure: "maximizeFigure"
     }
 
     // Open a save file dialog to save the serial data output screen
@@ -511,9 +515,29 @@ var controller = (function(dataCtrl, UICtrl) {
         });
     }
 
+    var toggleMaxRestoreButtons = function() {
+        const {remote} = require('electron');
+        const win = remote.getCurrentWindow();
+        var DOM = UICtrl.getDOMstrings();
+
+        if( win.isMaximized() ) {
+            // Window is maximized.. Set the icon to minimize
+            document.getElementById(DOM.maximizeFigure).src = "./assets/imgs/minimize.svg"
+        }
+        else {
+            // Window is smaller.. Set the icon to maximize
+            document.getElementById(DOM.maximizeFigure).src = "./assets/imgs/maximize.svg"
+        }
+    }
+
     // Create our UI event listeners
     var createEventListeners = function() {
+        const {remote} = require('electron');
+        const win = remote.getCurrentWindow();
         var DOM = UICtrl.getDOMstrings();
+
+        win.on('maximize', toggleMaxRestoreButtons);
+        win.on('unmaximize', toggleMaxRestoreButtons);
 
         document.getElementById(DOM.btnSend).addEventListener("click", () => {
             sendInputData();
@@ -544,6 +568,23 @@ var controller = (function(dataCtrl, UICtrl) {
 
         document.getElementById(DOM.btnSave).addEventListener("click", () => {
             UICtrl.openSaveDataWindow();
+        })
+
+        document.getElementById(DOM.btnWinClose).addEventListener("click", () => {
+            win.close();
+        })
+
+        document.getElementById(DOM.btnWinMaximize).addEventListener("click", () => {
+            if( win.isMaximized() ) {
+                win.unmaximize();
+            }
+            else {
+                win.maximize();
+            }
+        })
+
+        document.getElementById(DOM.btnWinMinimize).addEventListener("click", () => {
+            win.minimize();
         })
     }
 

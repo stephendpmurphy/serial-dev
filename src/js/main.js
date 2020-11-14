@@ -10,15 +10,16 @@ if (require('electron-squirrel-startup')) return;
 function createWindow () {
   const win = new BrowserWindow({
     backgroundColor: '#2E3440',
-    width: 700,
-    height: 625,
+    height: 700,
+    width: 625,
+    frame: false,
     'minHeight': 700,
     'minWidth': 625,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
     },
-    icon: path.join(__dirname, "../img/zap.png")
+    icon: path.join(__dirname, "../assets/icons/thunder.png")
   })
 
   win.webContents.on('new-window', (e, url) => {
