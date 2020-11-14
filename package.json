@@ -37,8 +37,7 @@
     "ansi-regex": "^5.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "nord": "^0.2.1",
-    "serialport": "^9.0.2",
-    "update-electron-app": "^2.0.1"
+    "serialport": "^9.0.2"
   },
   "config": {
     "forge": {
