@@ -110,7 +110,7 @@
           "name": "@electron-forge/publisher-github",
           "config": {
             "draft": true,
-            "prerelease": false,
+            "prerelease": true,
             "repository": {
               "owner": "stephendpmurphy",
               "name": "serial_dev"
