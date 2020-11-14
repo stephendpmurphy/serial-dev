@@ -2,12 +2,30 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Electron Serial Monitor</title>
+    <title>Serial Dev</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <link rel="stylesheet" href="css/style.css">
 </head>
     <body>
         <div class="serialMonitor">
+            <div class="titlebar">
+                <div class="titlebar--icon"">
+                    <img class="titlebar--icon-figure" src="assets/icons/thunder_24x24.png">
+                </div>
+                <div class=titlebar--title>Serial Dev</div>
+                <div class="titlebar--controls">
+                    <div class="titlebar--controls-btn" id="btnWinMinimize">
+                        <img class="titlebar--controls-btn-minimize" src="assets/imgs/minus.svg"/>
+                    </div>
+                    <div class="titlebar--controls-btn" id="btnWinMaximize">
+                        <img class="titlebar--controls-btn-maximize" id="maximizeFigure" src="assets/imgs/maximize.svg"/>
+                    </div>
+                    <div class="titlebar--controls-btn" id="btnWinClose">
+                        <img class="titlebar--controls-btn-close" src="assets/imgs/close.svg"/>
+                    </div>
+                </div>
+            </div>
+
             <div class="infoMsg" id="infoBox">
                 <p class="infoMsg--head" id="infoHead"></p>
                 <p class="infoMsg--txt" id="infoTxt"></p>
@@ -17,7 +35,7 @@
                 <div class="settings--panel" id="settingsPanel">
                     <div class="settings--panel-exit">
                         <div id="btnSettingsClose" class="btn btn--wImg btn--exit">
-                            <img class="btn--figure" src="assets/img/x.svg">
+                            <img class="btn--figure" src="assets/imgs/close.svg">
                         </div>
                     </div>
 
@@ -60,20 +78,23 @@
             <div class="control">
                 <input class="txtInput" id="txtInput" type="text" name="input">
                 <div id="btnSend" class="btn btn--wImg btn--blue">
-                    <img class="btn--figure" src="assets/img/send.svg">
+                    <img class="btn--figure" src="assets/imgs/send.svg">
                 </div>
                 <div id="btnSave" class="btn btn--wImg btn--blue">
-                    <img class="btn--figure" src="assets/img/save.svg">
+                    <img class="btn--figure" src="assets/imgs/save.svg">
                 </div>
                 <div id="btnSettings" class="btn btn--wImg btn--blue">
-                    <img class="btn--figure" src="assets/img/settings.svg">
+                    <img class="btn--figure" src="assets/imgs/settings.svg">
                 </div>
             </div>
 
             <div class="footer">
                 <div class="footer--status" id="txtStatus">Disconnected</div>
                 <div class="footer--info">
-                    <p>Made with ❤️ on <a target="_blank" href="https://github.com/stephendpmurphy/serial-monitor">Github</a></p>
+                    <p>Made on <a target="_blank" href="https://github.com/stephendpmurphy/serial-monitor">Github</a> -</p>
+                </div>
+                <div class="footer--version">
+                    <p id="txtVersion">0.0.0</p>
                 </div>
             </div>
         </div>

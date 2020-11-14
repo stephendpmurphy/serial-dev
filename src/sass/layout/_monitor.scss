@@ -5,6 +5,69 @@
     flex-direction: column;
 }
 
+.titlebar {
+    height: 32px;
+    width: 100%;
+    background: #2E3440;
+    -webkit-app-region: drag;
+    display: flex;
+    flex-direction: row;
+    transition: all .1s;
+
+
+    &--icon {
+        height: 100%;
+        width: 30px;
+        margin-left: 0.8rem;
+
+        &-figure {
+            transform: translateY(4px);
+        }
+    }
+
+    &--title {
+        transform: translateY(1rem);
+        font-weight: 600;
+        font-size: 1.4rem;
+        padding-left: 0.8rem;
+        height: 100%;
+        width: 100%;
+    }
+
+    &--controls {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+
+        &-btn {
+            margin-right: 1rem;
+            width: 3rem;
+            -webkit-app-region: no-drag;
+
+            &:hover {
+                transform: translateY(-0.3rem);
+                box-shadow: 0 1rem 2rem rgba($color-black, .5);
+            }
+
+            &:active {
+                transform: translateY(-0.2rem);
+            }
+
+            &-minimize {
+                transform: translate(.5rem, 1.1rem);
+            }
+
+            &-maximize {
+                transform: translate(0.5rem, 0.6rem);
+            }
+
+            &-close {
+                transform: translate(0.5rem, 0.6rem);
+            }
+        }
+    }
+}
+
 .settings {
     &{
         position: absolute;
@@ -120,6 +183,10 @@
     &--info {
         text-align: right;
         width: 50%;
+    }
+
+    &--version {
+        margin-left: 0.35rem;
     }
 }
 
