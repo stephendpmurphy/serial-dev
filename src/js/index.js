@@ -11,7 +11,6 @@ var dataController = (function() {
             path: null,
             baud: null
         },
-        isConfigured: false,
         CB_dataRcvd: null,
         CB_portConnected: null,
         CB_portDisconnected: null,
@@ -32,49 +31,6 @@ var dataController = (function() {
         }
     }
 
-    // Instantiate a new SerialPort object using the provided serial port path
-    // and baud rate
-    var instantiatePort = function(path, baud) {
-        const SerialPort = require('serialport');
-        // Create a new serial port object using the path and badurate sepcified.
-        // Set auto-open to false meaning the portConnect API must be called before
-        // data will begin to come through
-        serialPort.port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
-            if(err) {
-                serialPort.CB_error(err);
-                return false;
-            }
-            else {
-                return true;
-            }
-        })
-
-        const Readline = require('@serialport/parser-readline');
-
-        // Attach a parser that searches for the specified delimeter before sending
-        // data through on the "data" event.
-        serialPort.parser = serialPort.port.pipe(new Readline({delimeter: '\n'}))
-
-        // Create the new "data" even CB which strips ANSI codes from the string,
-        // and then call ours CB for our controller to consumer and then display
-        serialPort.parser.on('data', (data) => {
-            var strippedData = removeAnsiCodes(data);
-            serialPort.CB_dataRcvd(strippedData);
-        })
-
-        // When the port is open, emit a console message
-        serialPort.port.on('open', () => {
-            serialPort.CB_portConnected();
-        })
-
-        // When the port is closed, emit a console message
-        serialPort.port.on('close', () => {
-            serialPort.CB_portDisconnected();
-        })
-
-        return true;
-    }
-
     // Data Controller API
     return {
         // Retrieve available serial port paths and populate a port list to be
@@ -83,10 +39,9 @@ var dataController = (function() {
             const SerialPort = require('serialport');
             var portList = [];
             try {
-                SerialPort.list().then((ports, err) => {
+                await SerialPort.list().then((ports, err) => {
                     if (err) {
                         serialPort.CB_error(err);
-                        return [];
                     }
 
                     if (ports.length !== 0) {
@@ -101,61 +56,87 @@ var dataController = (function() {
                         })
                     }
                 })
+
+                return portList;
             }
             catch(err) {
                 serialPort.CB_error(err.message);
             }
-
-            return portList;
         },
         // Return the current Serial Port settings
         getPortSettings: function() {
             return serialPort.settings;
         },
-        // Update the Serial Port path and baud rate. Return the state of updating
-        // the port settings
-        updatePortSettings: function(path, baud) {
-            if( (typeof(path) !== 'string') || path === "" )
+        // Connect to the port, checking if it has been properly configured, and the serial port object
+        // is not undefined or null
+        portConnect: function(path, baud) {
+            if( (typeof(path) !== 'string') || path === "" ) {
                 return false;
+            }
 
-            if( (typeof(baud) !== 'number') || baud === 0 )
+            if( (typeof(baud) !== 'number') || baud === 0 ) {
                 return false;
+            }
+
+            if( (serialPort.settings.path === path) && (serialPort.settings.baud === baud) && (serialPort.port.isOpen)) {
+                return false;
+            }
 
             serialPort.settings.path = path;
             serialPort.settings.baud = baud;
 
-            serialPort.isConfigured = instantiatePort(serialPort.settings.path, serialPort.settings.baud);
+            if( (serialPort.port !== null) && (serialPort.port.isOpen) ) {
+                this.portDisconnect();
+            }
 
-            return serialPort.isConfigured;
-        },
-        // Connect to the port, checking if it has been properly configured, and the serial port object
-        // is not undefined or null
-        portConnect: function() {
-            try {
-                if( ((serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null)) || instantiatePort(portSettings.path, portSettings.baud)) {
-                    serialPort.port.open( (err) => {
-                        if( err ) {
-                            serialPort.CB_error(err);
-                        }
-                    });
+            const SerialPort = require('serialport');
+            // Create a new serial port object using the path and badurate sepcified.
+            // Set auto-open to false meaning the portConnect API must be called before
+            // data will begin to come through
+            serialPort.port = new SerialPort(path, {autoOpen: false, baudRate: baud}, (err) => {
+                if(err) {
+                    serialPort.CB_error(err);
                 }
-            }
-            catch(err) {
-                serialPort.CB_error(err.message);
-                return false;
-            }
+            })
+
+            const Readline = require('@serialport/parser-readline');
+
+            // Attach a parser that searches for the specified delimeter before sending
+            // data through on the "data" event.
+            serialPort.parser = serialPort.port.pipe(new Readline({delimeter: '\n'}))
+
+            // Create the new "data" even CB which calls our data rcvd callback
+            serialPort.parser.on('data', (data) => {
+                var incoming = removeAnsiCodes(data);
+                serialPort.CB_dataRcvd(incoming);
+            })
+
+            // When the port is open, send a callback
+            serialPort.port.on('open', () => {
+                serialPort.CB_portConnected();
+            })
+
+            // When the port is closed, send a callback
+            serialPort.port.on('close', () => {
+                serialPort.CB_portDisconnected();
+            })
+
+            serialPort.port.open( (err) => {
+                if( err ) {
+                    serialPort.CB_error(err);
+                }
+            });
         },
         // Disconnect the port, checking if it has been properly configured, and the serial port object
         // is not undefined or null
         portDisconnect: function() {
             try {
-                if( (serialPort.isConfigured) && (serialPort.port !== undefined) && (serialPort.port !== null) ) {
+                if( (serialPort.port !== null) && (serialPort.port.isOpen) ) {
                     serialPort.port.close();
                 }
             }
             catch(err) {
                 serialPort.CB_error(err.message);
-                return false;
             }
         },
         // Setup a callback to be executed any time new data is received over the serial port.
@@ -618,7 +599,7 @@ var controller = (function(dataCtrl, UICtrl) {
 
             // Kick off our timer responsible or retrieving
             // available ports
-            timer_updatePorts();
+            retrievePortList();
         }
     }
 })(dataController, UIController);
