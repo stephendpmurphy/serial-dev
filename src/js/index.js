@@ -78,16 +78,16 @@ var dataController = (function() {
                 return false;
             }
 
-            if( (serialPort.settings.path === path) && (serialPort.settings.baud === baud) && (serialPort.port.isOpen)) {
+            if( (serialPort.settings.path === path) && (serialPort.settings.baud === baud) ) {
                 return false;
             }
-
-            serialPort.settings.path = path;
-            serialPort.settings.baud = baud;
 
             if( (serialPort.port !== null) && (serialPort.port.isOpen) ) {
                 this.portDisconnect();
             }
+
+            serialPort.settings.path = path;
+            serialPort.settings.baud = baud;
 
             const SerialPort = require('serialport');
             // Create a new serial port object using the path and badurate sepcified.
