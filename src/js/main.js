@@ -1,6 +1,5 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const update = require('update-electron-app');
 
 // Check if we are in development mode
 let development = process.argv[2] === "development";
@@ -52,3 +51,7 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+try {
+    require('electron-reloader')(module)
+} catch (_) {}

@@ -63,12 +63,14 @@ $ npm install
 
 ### Building
 
-To build the application, you will first need to compile the styling sass source:
+To build the application, you will first need to compile the styling sass source. This will then watch the SASS source and recompile as changes are made. This command
+should be executed once in a terminal and left open. Occasionally, sytnax errors in the SASS source will cause this command to hang and you will need to cancel and restart the command.
 ```bash
 $ npm run compile:sass
 ```
 
-Once complete, you can run the application:
+Once complete, you can run the application. The app has a "live-reload" feature and will watch the source directory for changes, and reload as needed. This command
+should be executed once in a terminal and left open.
 ```bash
 $ npm start
 ```
