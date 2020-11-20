@@ -432,6 +432,8 @@ var controller = (function(dataCtrl, UICtrl) {
         UICtrl.setStatus(`Connected to ${path} @ ${baud} baud`);
         document.getElementById(DOM.btnConnect).innerText = "disconnect";
         document.getElementById(DOM.btnConnect).style.backgroundColor = "#BF616A";
+        document.getElementById(DOM.cboBaudList).disabled=true;
+        document.getElementById(DOM.cboPortList).disabled=true;
     }
 
     var CB_portDisconnected = function() {
@@ -440,28 +442,21 @@ var controller = (function(dataCtrl, UICtrl) {
         UICtrl.setStatus('Disconnected');
         document.getElementById(DOM.btnConnect).innerText = "connect";
         document.getElementById(DOM.btnConnect).style.backgroundColor = "";
+        document.getElementById(DOM.cboBaudList).disabled=false;
+        document.getElementById(DOM.cboPortList).disabled=false;
     }
 
     var CB_errorOccured = function (err) {
         UICtrl.showInfoMsg("error", "Serial Port error", err);
     }
 
-    // Timer used to retrieve a port list, and then display it using the
-    // UI controller API. We then reschedule this function to be fired again.
-    var timer_updatePorts = function() {
-        retrievePortList();
-        UICtrl.updatePortList(availablePorts);
-
-        setTimeout(timer_updatePorts, 500);
-    }
-
     // Retrieve an available port list using the data controller API.
-    var retrievePortList = function() {
+    var retrievePortList = async function() {
         // Retrieve the currently available ports.
-        dataCtrl.getAvailableSerialPorts().then( (ports) => {
-            // Store the available ports list
-            availablePorts = ports;
-        })
+        availablePorts = await dataCtrl.getAvailableSerialPorts();
+        UICtrl.updatePortList(availablePorts);
+        // Reschedule a port retrieval
+        setTimeout(retrievePortList, 500);
     }
 
     // Retrieve the current text input, send it out the serial port
@@ -479,25 +474,16 @@ var controller = (function(dataCtrl, UICtrl) {
         UICtrl.clearTxtInput();
     }
 
-    var applySettings = function() {
-        var path = UICtrl.getSelectedPath();
-        var baud = UICtrl.getSelectedBaud();
-
-        if( !dataCtrl.updatePortSettings(path, baud) ) {
-            UICtrl.showInfoMsg("error", "Could not connect.", "Failed to connect to the requested serial port.");
-            UICtrl.setStatus('Disconnected');
-        }
-    }
-
     // Create an event that fires when the enter key is depressed.
     var init_keyboard_input = function() {
         const {remote} = require('electron');
         const BrowserWindow = remote.BrowserWindow;
-        const win = BrowserWindow.getFocusedWindow();
+        const win = BrowserWindow.getAllWindows()[0];
 
         win.webContents.on("before-input-event", (event, input) => {
-            if( (input.type === "keyDown") && (input.code === "Enter") )
+            if( (input.type === "keyDown") && ((input.code === "Enter") || (input.code === "NumpadEnter")) ) {
                 sendInputData();
+            }
         });
     }
 
@@ -539,9 +525,9 @@ var controller = (function(dataCtrl, UICtrl) {
 
         document.getElementById(DOM.btnConnect).addEventListener("click", () => {
             if( document.getElementById(DOM.btnConnect).innerText == "connect" ) {
-
-                applySettings();
-                dataCtrl.portConnect();
+                var path = UICtrl.getSelectedPath();
+                var baud = UICtrl.getSelectedBaud();
+                dataCtrl.portConnect(path, baud);
             }
             else {
                 dataCtrl.portDisconnect();
